@@ -16,7 +16,10 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name' => 'Administración',
+            'rol_id' => 1,
+            'nombre' => 'Administración',
+            'apellido' => '',
+            'cedula' => '123456',
             'email' => 'administracion@gestapp.com',
             'departamento_id' => 1,
             'password' => Hash::make('admin.gestapp2022'),

@@ -1,6 +1,6 @@
 # GESTAPP
 
-Sistema para la gestión de los proyectos e inversiones de la Empresa Sarcom S.A.
+Sistema para la gestión de los proyectos e inversiones para empresas.
 
 ## Installation
 Primeramente hacer una copia del archivo env.example a uno nuevo con el nombre ".env", este archivo .env editarlo y definir las configuraciones con las de la máquina local (usuario, password y nombre de base de datos, entre otros).

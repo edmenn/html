@@ -15,16 +15,20 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();    // auto-increment and primary key
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->smallInteger('rol_id');
+            $table->string('nombre', 50);
+            $table->string('apellido', 50);
+            $table->string('cedula', 15);
+            $table->string('email', 75)->unique();
             $table->smallInteger('departamento_id');
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password', 255);
             $table->rememberToken();
             $table->timestamps();
 
             // INDEXES
             $table->foreign('departamento_id')->references('id')->on('departamentos')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreign('rol_id')->references('id')->on('roles')->onUpdate('cascade')->onDelete('restrict');
         });
     }
 

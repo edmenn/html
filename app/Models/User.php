@@ -43,6 +43,13 @@ class User extends Authenticatable
     ];
 
     /**
+     * Para obtener el vinculo con la tabla roles
+     */
+    public function rol(){
+        return $this->belongsTo('App\Models\Rol', 'rol_id');
+    }
+
+    /**
      * Para obtener el vinculo con la tabla departamentos
      */
     public function departamento(){

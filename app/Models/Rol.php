@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Subproyecto extends Model
+class Rol extends Model
 {
     use HasFactory;
 
@@ -14,12 +14,12 @@ class Subproyecto extends Model
      *
      * @var string
      */
-    protected $table = 'subproyectos';
+    protected $table = 'roles';
 
     /**
-     * Para obtener el vinculo con la tabla proyectos
+     * Para obtener el vinculo con la tabla users
      */
-    public function proyecto(){
-        return $this->belongsTo('App\Models\Proyecto', 'proyecto_id');
+    public function users(){
+        return $this->hasMany('App\Models\User', 'rol_id');
     }
 }

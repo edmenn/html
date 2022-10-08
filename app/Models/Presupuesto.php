@@ -5,9 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Proyecto extends Model
+class Presupuesto extends Model
 {
     use HasFactory;
+
+    /**
+     * Para obtener el vinculo con la tabla puertos
+     */
+    public function puerto(){
+        return $this->belongsTo('App\Models\Puerto', 'puerto_id');
+    }
 
     /**
      * Para obtener el vinculo con la tabla departamentos
@@ -19,8 +26,8 @@ class Proyecto extends Model
     /**
      * Para obtener el vinculo con la tabla users
      */
-    public function user(){
-        return $this->belongsTo('App\Models\User', 'user_id');
+    public function responsable(){
+        return $this->belongsTo('App\Models\User', 'responsable_id');
     }
 
     /**
@@ -31,16 +38,9 @@ class Proyecto extends Model
     }
 
     /**
-     * Para obtener el vinculo con la tabla presupuestos
+     * Para obtener el vinculo con la tabla proyectos
      */
-    public function presupuesto(){
-        return $this->belongsTo('App\Models\Presupuesto', 'presupuesto_id');
-    }
-
-    /**
-     * Para obtener el vinculo con la tabla subproyectos
-     */
-    public function subproyectos(){
-        return $this->hasMany('App\Models\Subproyecto', 'proyecto_id');
+    public function proyectos(){
+        return $this->hasMany('App\Models\Proyecto', 'presupuesto_id');
     }
 }

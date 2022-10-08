@@ -50,16 +50,13 @@
             <li class="@if (Request::url() == route('dashboard')) active @endif">
                 <a href="/"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
             </li>
-            <li class="header">Modulo 1</li>
-            <li class="">
-                <a href="/"><i class="fa fa-balance-scale"></i> <span>Listado 1</span></a>
+            <li class="header">Proyectos</li>
+            <li class="@if (Request::url() == route('presupuestos.index')) active @endif">
+                <a href="{{ route('presupuestos.index') }}"><i class="fa fa-list-alt"></i> <span>Presupuestos</span></a>
             </li>
-            <li class="">
-                <a href="/"><i class="fa fa-balance-scale"></i> <span>Listado 2</span></a>
-            </li>
-            <li class="">
-                <a href="/"><i class="fa fa-balance-scale"></i> <span>Listado 3</span></a>
-            </li>
+            @if (Auth::user()->rol_id == 1) 
+                @include('layouts.menu.admin')
+            @endif
         </ul>
         <!-- END sidebar menu: ROL ADMIN -->        
     </section>

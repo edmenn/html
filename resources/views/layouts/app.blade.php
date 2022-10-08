@@ -43,4 +43,5 @@ $(function () {
     });
 });
 </script>
+@stack('scripts')
 </html>
