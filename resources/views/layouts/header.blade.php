@@ -40,7 +40,7 @@
                 <img src="{{ asset('images/user.png') }}" class="img-circle" alt="Administración - GESTAPP" />
             </div>
             <div class="pull-left info">
-                <p>{{ Auth::user()->name }}</p>
+                <p>{{ Auth::user()->nombre.' '.Auth::user()->apellido }}</p>
                 <div class="info-online"><i class="fa fa-circle text-success"></i> Conectado</div>
             </div>
         </div>

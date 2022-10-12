@@ -16,6 +16,8 @@
 <link rel="stylesheet" href="{{ asset('css/skin-blue.css') }}">
 <!-- iCheck -->
 <link rel="stylesheet" href="{{ asset('plugins/iCheck/square/blue.css') }}">
+<!-- dataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
@@ -34,6 +36,8 @@
 <script src="{{ asset('plugins/iCheck/icheck.min.js') }}"></script>
 <!-- App Js -->
 <script src="{{ asset('js/app.js') }}"></script>
+<!-- dataTables -->
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <script>
 $(function () {
     $('input').iCheck({

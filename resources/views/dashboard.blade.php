@@ -22,7 +22,7 @@
                         <p>Estadisticas 1</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-balance-scale"></i>
+                        <i class="fa fa-ship"></i>
                     </div>
                     <a href="/" class="small-box-footer">Ver más <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
@@ -46,7 +46,7 @@
                         <p>Estadisticas 3</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-user"></i>
+                        <i class="fa fa-list-alt"></i>
                     </div>
                     <a href="/" class="small-box-footer">Ver más <i class="fa fa-arrow-circle-right"></i></a>
                 </div>

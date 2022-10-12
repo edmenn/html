@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="box-body">
-                <table class="table table-bordered table-hover">
+                <table id="tabla" class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -35,7 +35,8 @@
                             <th>Código</th>
                             <th>Costo</th>
                             <th>Contratado</th>
-                            <th colspan="2" class="text-center">Acciones</th>
+                            <th class="text-center">Editar</th>
+                            <th class="text-center">Eliminar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,8 +48,8 @@
                             <td>{{ $item->codigo }}</td>
                             <td>{{ number_format($item->costo,0,',','.') }}</td>
                             <td>{{ number_format($item->contratado,0,',','.') }}</td>
-                            <td class="text-center"><a href="{{ route('proyectos.subproyectos.edit', [$proyecto->id, $item->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> Editar</a></td>
-                            <td class="text-center"><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button></td>
+                            <td class="text-center"><a href="{{ route('proyectos.subproyectos.edit', [$proyecto->id, $item->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
+                            <td class="text-center"><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -84,5 +85,33 @@ function eliminateHandle(id){
         }
     }
 }
+document.addEventListener('DOMContentLoaded', function () {
+    let table = new DataTable('#tabla', {
+        language: {
+            "decimal":        ",",
+            "emptyTable":     "No hay datos disponibles en la tabla",
+            "info":           "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            "infoEmpty":      "Mostrando 0 a 0 de 0 registros",
+            "infoFiltered":   "(filtrado de _MAX_ registros totales)",
+            "infoPostFix":    "",
+            "thousands":      ".",
+            "lengthMenu":     "Mostrar _MENU_ registros",
+            "loadingRecords": "Cargando...",
+            "processing":     "",
+            "search":         "Buscar:",
+            "zeroRecords":    "No se encontraron registros coincidentes",
+            "paginate": {
+                "first":      "Primero",
+                "last":       "Último",
+                "next":       "Siguiente",
+                "previous":   "Anterior"
+            },
+            "aria": {
+                "sortAscending":  ": activar para orden ascendente",
+                "sortDescending": ": activar para orden descendente"
+            }
+        }
+    });
+});
 </script>
 @endpush

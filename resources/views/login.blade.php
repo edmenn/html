@@ -29,7 +29,7 @@
                 <form method="post" action="{{ route('login') }}">
                     @csrf
                     <div class="form-group has-feedback @error('email') has-error @enderror">
-                        <input type="email" name="email" class="form-control" placeholder="Email" />
+                        <input type="email" name="email" value="{{ old('email') }}" class="form-control" placeholder="Email" autofocus />
                         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                         @error('email')
                             <span class="help-block">{{ $message }}</span>
