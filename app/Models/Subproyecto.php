@@ -22,4 +22,11 @@ class Subproyecto extends Model
     public function proyecto(){
         return $this->belongsTo('App\Models\Proyecto', 'proyecto_id');
     }
+
+    /**
+     * Para obtener el vinculo con la tabla estados
+     */
+    public function estado(){
+        return $this->belongsTo('App\Models\Estado', 'estado_id');
+    }
 }

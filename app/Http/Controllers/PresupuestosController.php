@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Presupuesto;
-use App\Models\Puerto;
+use App\Models\Localidad;
 use App\Models\User;
 use App\Models\Estado;
+use App\Models\Departamento;
 
 class PresupuestosController extends Controller
 {
@@ -21,7 +22,9 @@ class PresupuestosController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('verificarRol:administracion,jefe_departamental');
+        // PERMISOS PARA ROLES DE ADMINISTRADOR Y JEFE DEPARTAMENTAL
+        $this->middleware('verificarRol:administracion,jefe_departamental')
+             ->only(['create', 'store', 'destroy', 'ultimoCodigo', 'editEstado', 'updateEstado']);
     }
 
     /**
@@ -45,10 +48,31 @@ class PresupuestosController extends Controller
      */
     public function create()
     {
-        $puertos = Puerto::all();
+        $localidades = Localidad::all();
+        $departamentos = Departamento::all();
         $usuarios = User::whereIn('rol_id', [2,3])->get();
 
-        return view('presupuestos.create', compact('puertos', 'usuarios'));
+        return view('presupuestos.create', compact('localidades', 'departamentos', 'usuarios'));
+    }
+
+    /**
+     * Get lasta code from budget.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function ultimoCodigo(Request $request){
+        // PARAMETERS
+        $anho_fiscal = $request->input('anho_fiscal');
+        $anho_fiscal = !is_numeric($anho_fiscal) ? NULL : $anho_fiscal;
+        if(is_null($anho_fiscal)){
+            return response()->json(['status' => 'error', 'message' => 'Respuesta no encontrada!', 'code' => 200], 200);
+        }else{
+            // RELATED DATA
+            $presupuesto = Presupuesto::where('anho_fiscal', $anho_fiscal)->orderBy('codigo', 'desc')->take(1)->get();
+            $codigo = is_null($presupuesto->first()) ? 1 : intval($presupuesto->first()->codigo)+1;
+            return response()->json(['status' => 'success', 'codigo' => $codigo], 200);
+        }
     }
 
     /**
@@ -61,11 +85,14 @@ class PresupuestosController extends Controller
     {
         // validamos los datos enviados
         $rules = array(
-            'anho_fiscal' => 'required|string|max:4',
-            'codigo' => 'required|string|max:12',
-            'puerto_id' => 'required|integer|max:32767',
+            'anho_fiscal' => 'required|integer|max:9999',
+            'codigo' => 'required|integer|max:999',
+            'localidad_id' => 'required|integer|max:32767',
+            'nombre' => 'required|string|max:150',
             'descripcion' => 'required|string|max:255',
+            'tipo' => 'required|in:CAPEX,OPEX',
             'costo' => 'required|integer|max:2147483647',
+            'departamento_id' => 'required|integer|max:32767',
             'responsable_id' => 'required|integer',
         );
 
@@ -78,9 +105,12 @@ class PresupuestosController extends Controller
         $presupuesto = new Presupuesto;
         $presupuesto->anho_fiscal = $request->anho_fiscal;
         $presupuesto->codigo = $request->codigo;
-        $presupuesto->puerto_id = $request->puerto_id;
+        $presupuesto->localidad_id = $request->localidad_id;
+        $presupuesto->nombre = $request->nombre;
         $presupuesto->descripcion = $request->descripcion;
+        $presupuesto->tipo = $request->tipo;
         $presupuesto->costo = $request->costo;
+        $presupuesto->departamento_id = $request->departamento_id;
         $presupuesto->responsable_id = $request->responsable_id;
         $presupuesto->estado_id = 1; // en proceso
         $presupuesto->save();
@@ -113,11 +143,12 @@ class PresupuestosController extends Controller
     public function edit($id)
     {
         $presupuesto = Presupuesto::findOrFail($id);
-        $puertos = Puerto::all();
-        $estados = Estado::all();
+        $localidades = Localidad::all();
+        $departamentos = Departamento::all();
         $usuarios = User::whereIn('rol_id', [2,3])->get();
 
-        return view('presupuestos.edit', compact('presupuesto', 'puertos', 'usuarios', 'estados'));
+        return view('presupuestos.edit', compact('presupuesto', 'localidades', 'departamentos', 
+                                                'usuarios'));
     }
 
     /**
@@ -134,13 +165,15 @@ class PresupuestosController extends Controller
 
         // validamos los datos enviados
         $rules = array(
-            'anho_fiscal' => 'required|string|max:4',
-            'codigo' => 'required|string|max:12',
-            'puerto_id' => 'required|integer|max:32767',
+            'anho_fiscal' => 'required|integer|max:9999',
+            'codigo' => 'required|integer|max:999',
+            'localidad_id' => 'required|integer|max:32767',
+            'nombre' => 'required|string|max:150',
             'descripcion' => 'required|string|max:255',
+            'tipo' => 'required|in:CAPEX,OPEX',
             'costo' => 'required|integer|max:2147483647',
+            'departamento_id' => 'required|integer|max:32767',
             'responsable_id' => 'required|integer',
-            'estado_id' => 'required|integer|max:32767',
         );
 
         $validator =  Validator::make($request->input(), $rules);
@@ -151,10 +184,54 @@ class PresupuestosController extends Controller
         // modificamos el presupuesto
         $presupuesto->anho_fiscal = $request->anho_fiscal;
         $presupuesto->codigo = $request->codigo;
-        $presupuesto->puerto_id = $request->puerto_id;
+        $presupuesto->localidad_id = $request->localidad_id;
+        $presupuesto->nombre = $request->nombre;
         $presupuesto->descripcion = $request->descripcion;
+        $presupuesto->tipo = $request->tipo;
         $presupuesto->costo = $request->costo;
+        $presupuesto->departamento_id = $request->departamento_id;
         $presupuesto->responsable_id = $request->responsable_id;
+        $presupuesto->save();
+
+        // retornamos respuesta
+        return redirect()->route('presupuestos.index');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function editEstado($id)
+    {
+        $presupuesto = Presupuesto::findOrFail($id);
+        $estados = Estado::all();
+
+        return view('presupuestos.edit-estado', compact('presupuesto', 'estados'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateEstado(Request $request, $id)
+    {
+        // Verificamos que exista el presupuesto
+        $presupuesto = Presupuesto::findOrFail($id);
+
+        // validamos los datos enviados
+        $rules = array('estado_id' => 'required|integer|max:32767');
+
+        $validator =  Validator::make($request->input(), $rules);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // modificamos el estado del presupuesto
         $presupuesto->estado_id = $request->estado_id;
         $presupuesto->save();
 

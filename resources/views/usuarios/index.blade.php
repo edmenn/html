@@ -23,7 +23,7 @@
                     <a href="{{ route('users.create') }}" class="btn btn-primary">Agregar Usuario</a>
                 </div>
             </div>
-            <div class="box-body">
+            <div class="box-body table-responsive">
                 <table id="tabla" class="table table-bordered table-hover">
                     <thead>
                         <tr>
@@ -34,8 +34,7 @@
                             <th>Rol</th>
                             <th>Email</th>
                             <th>Departamento</th>
-                            <th class="text-center">Editar</th>
-                            <th class="text-center">Eliminar</th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,8 +47,14 @@
                             <td>{{ $item->rol->descripcion }}</td>
                             <td>{{ $item->email }}</td>
                             <td>{{ $item->departamento->nombre }}</td>
-                            <td class="text-center"><a href="{{ route('users.edit', $item->id) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
-                            <td class="text-center"><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
+                            <td>
+                                <table>
+                                    <tbody><tr>
+                                        <td class="text-center"><a href="{{ route('users.edit', $item->id) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
+                                        <td class="text-center"><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
+                                    </tr></tbody>
+                                </table>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

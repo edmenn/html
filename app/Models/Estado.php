@@ -22,4 +22,11 @@ class Estado extends Model
     public function proyectos(){
         return $this->hasMany('App\Models\Proyecto', 'estado_id');
     }
+
+    /**
+     * Para obtener el vinculo con la tabla subproyectos
+     */
+    public function subproyectos(){
+        return $this->hasMany('App\Models\Subproyecto', 'estado_id');
+    }
 }

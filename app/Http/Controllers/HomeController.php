@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Localidad;
+use App\Models\User;
+use App\Models\Presupuesto;
+use App\Models\Proveedor;
 
 class HomeController extends Controller
 {
@@ -16,7 +20,12 @@ class HomeController extends Controller
             return redirect()->route('login');
         }
 
-        return view('dashboard');
+        $localidades = Localidad::all()->count();
+        $users = User::all()->count();
+        $presupuestos = Presupuesto::all()->count();
+        $proveedores = Proveedor::all()->count();
+
+        return view('dashboard', compact('localidades', 'users', 'presupuestos', 'proveedores'));
     }
 
 }

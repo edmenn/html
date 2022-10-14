@@ -23,37 +23,54 @@
                     <a href="{{ route('presupuestos.create') }}" class="btn btn-primary">Agregar Presupuesto</a>
                 </div>
             </div>
-            <div class="box-body">
+            <div class="box-body table-responsive">
                 <table id="tabla" class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Año Fiscal</th>
                             <th>Código</th>
-                            <th>Puerto</th>
+                            <th>Localidad</th>
+                            <th>Nombre</th>
                             <th>Descripción</th>
+                            <th>Tipo</th>
                             <th>Costo</th>
+                            <th>Departamento</th>
                             <th>Responsable</th>
                             <th>Estado</th>
-                            <th class="text-center">Info</th>
-                            <th class="text-center">Editar</th>
-                            <th class="text-center">Eliminar</th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($presupuestos as $item)    
                         <tr>
                             <td>{{ $item->id }}</td>
-                            <td>{{ $item->anho_fiscal }}</td>
-                            <td>{{ $item->codigo }}</td>
-                            <td>{{ $item->puerto->nombre }}</td>
+                            <td>{{ $item->anho_fiscal .'-'. sprintf("%03d", $item->codigo) }}</td>
+                            <td>{{ $item->localidad->nombre }}</td>
+                            <td>{{ $item->nombre }}</td>
                             <td>{{ $item->descripcion }}</td>
+                            <td>{{ $item->tipo }}</td>
                             <td>{{ 'Gs. '.number_format($item->costo,0,',','.') }}</td>
+                            <td>{{ $item->departamento->nombre }}</td>
                             <td>{{ $item->responsable->nombre.' '.$item->responsable->apellido }}</td>
                             <td>{{ $item->estado->nombre }}</td>
-                            <td class="text-center"><a href="{{ route('presupuestos.proyectos.index', $item->id) }}" class="btn btn-primary"><i class="fa fa-eye"></i> </a></td>
-                            <td class="text-center"><a href="{{ route('presupuestos.edit', $item->id) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
-                            <td class="text-center"><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
+                            <td>
+                                <table>
+                                    <tbody><tr>
+                                        <td class="text-center"><a href="{{ route('presupuestos.proyectos.index', $item->id) }}" class="btn btn-primary"><i class="fa fa-eye"></i> </a></td>
+                                        <td class="text-center"><a href="{{ route('presupuestos.edit', $item->id) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
+                                        <td class="text-center"><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
+                                    </tr>
+                                    {{-- PARA ROL DE ADMIN Y JEFE DEPARTAMENTAL --}}
+                                    @if (in_array(Auth::user()->rol_id, [1,2]))
+                                    </tr>
+                                        <td colspan="3" class="text-center">
+                                            <a href="{{ route('presupuestos.editEstado', $item->id) }}" class="btn btn-default">Modificar Estado</a>
+                                        </td>
+                                    <tr>    
+                                    @endif
+                                    </tbody>
+                                </table>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

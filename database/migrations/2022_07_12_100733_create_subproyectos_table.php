@@ -20,11 +20,13 @@ class CreateSubproyectosTable extends Migration
             $table->string('descripcion', 255);
             $table->string('codigo', 12);
             $table->integer('costo');
+            $table->smallInteger('estado_id');
             $table->integer('contratado');
             $table->timestamps();
 
             // INDEXES
             $table->foreign('proyecto_id')->references('id')->on('proyectos')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreign('estado_id')->references('id')->on('estados')->onUpdate('cascade')->onDelete('restrict');
         });
     }
 

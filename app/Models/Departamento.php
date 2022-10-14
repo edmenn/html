@@ -17,9 +17,9 @@ class Departamento extends Model
     }
 
     /**
-     * Para obtener el vinculo con la tabla proyectos
+     * Para obtener el vinculo con la tabla presupuestos
      */
-    public function proyectos(){
-        return $this->hasMany('App\Models\Proyecto', 'departamento_id');
+    public function presupuestos(){
+        return $this->hasMany('App\Models\Presupuesto', 'departamento_id');
     }
 }

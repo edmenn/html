@@ -4,12 +4,12 @@
 
 <div class="content-wrapper">
     <section class="content-header">
-        <h1>Puertos</h1>
+        <h1>Localidades</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> 
-                Puertos
+                Localidades
             </a></li>
-            <li class="active">Puertos</li>
+            <li class="active">Localidades</li>
         </ol>
     </section>
 
@@ -17,31 +17,36 @@
         <div class="box">
             <div class="box-header">
                 <div class="pull-left">
-                    <h3 class="box-title">Listado de Puertos</h3>
+                    <h3 class="box-title">Listado de Localidades</h3>
                 </div>
                 <div class="pull-right">
-                    <a href="{{ route('puertos.create') }}" class="btn btn-primary">Agregar puerto</a>
+                    <a href="{{ route('localidades.create') }}" class="btn btn-primary">Agregar localidad</a>
                 </div>
             </div>
-            <div class="box-body">
+            <div class="box-body table-responsive">
                 <table id="tabla" class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Nombre</th>
                             <th>Dirección</th>
-                            <th class="text-center">Editar</th>
-                            <th class="text-center">Eliminar</th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($puertos as $item)    
+                        @foreach ($localidades as $item)    
                         <tr>
                             <td>{{ $item->id }}</td>
                             <td>{{ $item->nombre }}</td>
                             <td>{{ $item->direccion }}</td>
-                            <td class="text-center"><a href="{{ route('puertos.edit', $item->id) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
-                            <td class="text-center"><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
+                            <td>
+                                <table>
+                                    <tbody><tr>
+                                        <td class="text-center"><a href="{{ route('localidades.edit', $item->id) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
+                                        <td class="text-center"><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
+                                    </tr></tbody>
+                                </table>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -55,18 +60,18 @@
 @push('scripts')
 <script type="text/javascript">
 function eliminateHandle(id){
-    let text = "Está seguro que desea eliminar el puerto?";
+    let text = "Está seguro que desea eliminar el localidad?";
     if (confirm(text) == true) {
         try {
             let requestBody = { _token: '{{ csrf_token() }}' }
-            fetch("/puertos/"+id, 
+            fetch("/localidades/"+id, 
                 { method: "DELETE", headers: new Headers( {"Content-Type": "application/json"} ),
                 body: JSON.stringify( requestBody )
             })
             .then((response) => response.json())
             .then((data) => {
                 if(data.status == "success"){
-                    location.href = "{{ route('puertos.index') }}";
+                    location.href = "{{ route('localidades.index') }}";
                 }
             });
         } catch (error) {

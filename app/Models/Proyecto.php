@@ -10,13 +10,6 @@ class Proyecto extends Model
     use HasFactory;
 
     /**
-     * Para obtener el vinculo con la tabla departamentos
-     */
-    public function departamento(){
-        return $this->belongsTo('App\Models\Departamento', 'departamento_id');
-    }
-
-    /**
      * Para obtener el vinculo con la tabla users
      */
     public function user(){

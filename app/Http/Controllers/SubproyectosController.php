@@ -22,7 +22,9 @@ class SubproyectosController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('verificarRol:administracion,jefe_departamental');
+        // PERMISOS PARA ROLES DE ADMINISTRADOR Y JEFE DEPARTAMENTAL
+        $this->middleware('verificarRol:administracion,jefe_departamental')
+             ->only(['create', 'store', 'destroy', 'editEstado', 'updateEstado']);
     }
 
     /**
@@ -108,9 +110,8 @@ class SubproyectosController extends Controller
     public function edit(Proyecto $proyecto, $id)
     {
         $subproyecto = Subproyecto::findOrFail($id);
-        $estados = Estado::all();
 
-        return view('subproyectos.edit', compact('proyecto', 'subproyecto', 'estados'));
+        return view('subproyectos.edit', compact('proyecto', 'subproyecto'));
     }
 
     /**
@@ -145,6 +146,48 @@ class SubproyectosController extends Controller
         $subproyecto->codigo = $request->codigo;
         $subproyecto->costo = $request->costo;
         $subproyecto->contratado = $request->contratado;
+        $subproyecto->save();
+
+        // retornamos respuesta
+        return redirect()->route('proyectos.subproyectos.index', $proyecto->id);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function editEstado(Proyecto $proyecto, $id)
+    {
+        $subproyecto = Subproyecto::findOrFail($id);
+        $estados = Estado::all();
+
+        return view('subproyectos.edit-estado', compact('proyecto', 'subproyecto', 'estados'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateEstado(Request $request, Proyecto $proyecto, $id)
+    {
+        // Verificamos que exista el subproyecto
+        $subproyecto = Subproyecto::findOrFail($id);
+
+        // validamos los datos enviados
+        $rules = array('estado_id' => 'required|integer|max:32767');
+
+        $validator =  Validator::make($request->input(), $rules);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // modificamos el estado del subproyecto
+        $subproyecto->estado_id = $request->estado_id;
         $subproyecto->save();
 
         // retornamos respuesta

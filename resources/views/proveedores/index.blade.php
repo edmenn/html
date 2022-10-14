@@ -23,7 +23,7 @@
                     <a href="{{ route('proveedores.create') }}" class="btn btn-primary">Agregar proveedor</a>
                 </div>
             </div>
-            <div class="box-body">
+            <div class="box-body table-responsive">
                 <table id="tabla" class="table table-bordered table-hover">
                     <thead>
                         <tr>
@@ -33,8 +33,7 @@
                             <th>RUC</th>
                             <th>Teléfono</th>
                             <th>Dirección</th>
-                            <th class="text-center">Editar</th>
-                            <th class="text-center">Eliminar</th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,8 +45,14 @@
                             <td>{{ $item->ruc }}</td>
                             <td>{{ $item->telefono }}</td>
                             <td>{{ $item->direccion }}</td>
-                            <td class="text-center"><a href="{{ route('proveedores.edit', $item->id) }}" class="btn btn-warning"><i class="fa fa-pencil"></i></a></td>
-                            <td class="text-center"><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
+                            <td>
+                                <table>
+                                    <tbody><tr>
+                                        <td class="text-center"><a href="{{ route('proveedores.edit', $item->id) }}" class="btn btn-warning"><i class="fa fa-pencil"></i></a></td>
+                                        <td class="text-center"><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
+                                    </tr></tbody>
+                                </table>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

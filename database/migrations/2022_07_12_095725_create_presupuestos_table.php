@@ -15,17 +15,21 @@ class CreatePresupuestosTable extends Migration
     {
         Schema::create('presupuestos', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();    // auto-increment and primary key
-            $table->string('anho_fiscal', 4);
-            $table->string('codigo', 12);
-            $table->smallInteger('puerto_id');
+            $table->smallInteger('anho_fiscal');
+            $table->smallInteger('codigo');
+            $table->smallInteger('localidad_id');
+            $table->string('nombre', 150);
             $table->string('descripcion', 255);
             $table->integer('costo');
+            $table->smallInteger('departamento_id');
             $table->integer('responsable_id');
             $table->smallInteger('estado_id');
+            $table->enum('tipo', ['CAPEX', 'OPEX']);
             $table->timestamps();
 
             // INDEXES
-            $table->foreign('puerto_id')->references('id')->on('puertos')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreign('localidad_id')->references('id')->on('localidades')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreign('departamento_id')->references('id')->on('departamentos')->onUpdate('cascade')->onDelete('restrict');
             $table->foreign('responsable_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('restrict');
             $table->foreign('estado_id')->references('id')->on('estados')->onUpdate('cascade')->onDelete('restrict');
         });

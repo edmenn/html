@@ -18,49 +18,49 @@
             <div class="col-lg-3 col-xs-6">
                 <div class="small-box bg-aqua">
                     <div class="inner">
-                        <h3>50</h3>
-                        <p>Estadisticas 1</p>
+                        <h3>{{ $localidades }}</h3>
+                        <p>Localidad</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-ship"></i>
+                        <i class="fa fa-building"></i>
                     </div>
-                    <a href="/" class="small-box-footer">Ver más <i class="fa fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('localidades.index') }}" class="small-box-footer">Ver más <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <div class="col-lg-3 col-xs-6">
                 <div class="small-box bg-green">
                     <div class="inner">
-                        <h3>25</h3>
-                        <p>Estadisticas 2</p>
+                        <h3>{{ $users }}</h3>
+                        <p>Usuarios</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-users"></i>
                     </div>
-                    <a href="/" class="small-box-footer">Ver más <i class="fa fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('users.index') }}" class="small-box-footer">Ver más <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <div class="col-lg-3 col-xs-6">
                 <div class="small-box bg-yellow">
                     <div class="inner">
-                        <h3>32</h3>
-                        <p>Estadisticas 3</p>
+                        <h3>{{ $presupuestos }}</h3>
+                        <p>Presupuestos</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-list-alt"></i>
                     </div>
-                    <a href="/" class="small-box-footer">Ver más <i class="fa fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('presupuestos.index') }}" class="small-box-footer">Ver más <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <div class="col-lg-3 col-xs-6">
                 <div class="small-box bg-red">
                     <div class="inner">
-                        <h3>20</h3>
-                        <p>Estadisticas 4</p>
+                        <h3>{{ $proveedores }}</h3>
+                        <p>Proveedores</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-user-plus"></i>
                     </div>
-                    <a href="/" class="small-box-footer">Ver más <i class="fa fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('proveedores.index') }}" class="small-box-footer">Ver más <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>

@@ -20,7 +20,6 @@ class CreateProyectosTable extends Migration
             $table->string('anho_fiscal', 4);
             $table->string('codigo', 12);
             $table->integer('presupuesto_id');
-            $table->smallInteger('departamento_id');
             $table->integer('user_id');
             $table->integer('costo');
             $table->smallInteger('estado_id');
@@ -29,7 +28,6 @@ class CreateProyectosTable extends Migration
 
             // INDEXES
             $table->foreign('presupuesto_id')->references('id')->on('presupuestos')->onUpdate('cascade')->onDelete('restrict');
-            $table->foreign('departamento_id')->references('id')->on('departamentos')->onUpdate('cascade')->onDelete('restrict');
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('restrict');
             $table->foreign('estado_id')->references('id')->on('estados')->onUpdate('cascade')->onDelete('restrict');
         });

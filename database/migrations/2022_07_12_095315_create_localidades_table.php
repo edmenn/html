@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePuertosTable extends Migration
+class CreateLocalidadesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePuertosTable extends Migration
      */
     public function up()
     {
-        Schema::create('puertos', function (Blueprint $table) {
+        Schema::create('localidades', function (Blueprint $table) {
             $table->smallInteger('id')->autoIncrement();    // auto-increment and primary key
             $table->string('nombre', 100)->unique();
             $table->string('direccion', 255);
@@ -28,6 +28,6 @@ class CreatePuertosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('puertos');
+        Schema::dropIfExists('localidades');
     }
 }

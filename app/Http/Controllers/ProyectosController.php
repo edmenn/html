@@ -22,7 +22,9 @@ class ProyectosController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('verificarRol:administracion,jefe_departamental');
+        // PERMISOS PARA ROLES DE ADMINISTRADOR Y JEFE DEPARTAMENTAL
+        $this->middleware('verificarRol:administracion,jefe_departamental')
+             ->only(['create', 'store', 'destroy', 'editEstado', 'updateEstado']);
     }
 
     /**
@@ -46,10 +48,9 @@ class ProyectosController extends Controller
      */
     public function create(Presupuesto $presupuesto)
     {
-        $departamentos = Departamento::all();
         $usuarios = User::whereIn('rol_id', [2,3])->get();
 
-        return view('proyectos.create', compact('presupuesto', 'departamentos', 'usuarios'));
+        return view('proyectos.create', compact('presupuesto', 'usuarios'));
     }
 
     /**
@@ -66,7 +67,6 @@ class ProyectosController extends Controller
             'descripcion' => 'required|string|max:255',
             'anho_fiscal' => 'required|string|max:4',
             'codigo' => 'required|string|max:12',
-            'departamento_id' => 'required|integer|max:32767',
             'user_id' => 'required|integer|max:2147483647',
             'costo' => 'required|integer|max:2147483647',
         );
@@ -83,7 +83,6 @@ class ProyectosController extends Controller
         $proyecto->descripcion = $request->descripcion;
         $proyecto->anho_fiscal = $request->anho_fiscal;
         $proyecto->codigo = $request->codigo;
-        $proyecto->departamento_id = $request->departamento_id;
         $proyecto->user_id = $request->user_id;
         $proyecto->costo = $request->costo;
         $proyecto->contratado = 0;
@@ -118,11 +117,9 @@ class ProyectosController extends Controller
     public function edit(Presupuesto $presupuesto, $id)
     {
         $proyecto = Proyecto::findOrFail($id);
-        $departamentos = Departamento::all();
-        $estados = Estado::all();
         $usuarios = User::whereIn('rol_id', [2,3])->get();
 
-        return view('proyectos.edit', compact('presupuesto', 'proyecto', 'departamentos', 'usuarios', 'estados'));
+        return view('proyectos.edit', compact('presupuesto', 'proyecto', 'usuarios'));
     }
 
     /**
@@ -143,11 +140,9 @@ class ProyectosController extends Controller
             'descripcion' => 'required|string|max:255',
             'anho_fiscal' => 'required|string|max:4',
             'codigo' => 'required|string|max:12',
-            'departamento_id' => 'required|integer|max:32767',
             'user_id' => 'required|integer|max:2147483647',
             'costo' => 'required|integer|max:2147483647',
             'contratado' => 'required|integer|max:2147483647',
-            'estado_id' => 'required|integer|max:32767',
         );
 
         $validator =  Validator::make($request->input(), $rules);
@@ -160,10 +155,50 @@ class ProyectosController extends Controller
         $proyecto->descripcion = $request->descripcion;
         $proyecto->anho_fiscal = $request->anho_fiscal;
         $proyecto->codigo = $request->codigo;
-        $proyecto->departamento_id = $request->departamento_id;
         $proyecto->user_id = $request->user_id;
         $proyecto->costo = $request->costo;
         $proyecto->contratado = $request->contratado;
+        $proyecto->save();
+
+        // retornamos respuesta
+        return redirect()->route('presupuestos.proyectos.index', $presupuesto->id);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function editEstado(Presupuesto $presupuesto, $id)
+    {
+        $proyecto = Proyecto::findOrFail($id);
+        $estados = Estado::all();
+
+        return view('proyectos.edit-estado', compact('presupuesto', 'proyecto', 'estados'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateEstado(Request $request, Presupuesto $presupuesto, $id)
+    {
+        // Verificamos que exista el proyecto
+        $proyecto = Proyecto::findOrFail($id);
+
+        // validamos los datos enviados
+        $rules = array('estado_id' => 'required|integer|max:32767');
+
+        $validator =  Validator::make($request->input(), $rules);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // modificamos el estado del proyecto
         $proyecto->estado_id = $request->estado_id;
         $proyecto->save();
 

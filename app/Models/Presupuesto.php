@@ -10,10 +10,10 @@ class Presupuesto extends Model
     use HasFactory;
 
     /**
-     * Para obtener el vinculo con la tabla puertos
+     * Para obtener el vinculo con la tabla localidades
      */
-    public function puerto(){
-        return $this->belongsTo('App\Models\Puerto', 'puerto_id');
+    public function localidad(){
+        return $this->belongsTo('App\Models\Localidad', 'localidad_id');
     }
 
     /**

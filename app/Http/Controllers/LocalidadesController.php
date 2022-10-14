@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use App\Models\Puerto;
+use App\Models\Localidad;
 
-class PuertosController extends Controller
+class LocalidadesController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -27,11 +27,11 @@ class PuertosController extends Controller
      */
     public function index()
     {
-        // obtenemos todos los puertos
-        $puertos = Puerto::all();
+        // obtenemos todos los localidades
+        $localidades = Localidad::all();
 
         // retornamos respuesta
-        return view('puertos.index', compact('puertos'));
+        return view('localidades.index', compact('localidades'));
     }
 
     /**
@@ -41,7 +41,7 @@ class PuertosController extends Controller
      */
     public function create()
     {
-        return view('puertos.create');
+        return view('localidades.create');
     }
 
     /**
@@ -63,14 +63,14 @@ class PuertosController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // creamos un nuevo puerto
-        $puerto = new puerto;
-        $puerto->nombre = $request->nombre;
-        $puerto->direccion = $request->direccion;
-        $puerto->save();
+        // creamos un nuevo localidad
+        $localidad = new localidad;
+        $localidad->nombre = $request->nombre;
+        $localidad->direccion = $request->direccion;
+        $localidad->save();
 
         // retornamos respuesta
-        return redirect()->route('puertos.index');
+        return redirect()->route('localidades.index');
     }
 
     /**
@@ -81,11 +81,11 @@ class PuertosController extends Controller
      */
     public function show($id)
     {
-        // chequeamos que exista el puerto
-        $puerto = Puerto::findOrFail($id);
+        // chequeamos que exista el localidad
+        $localidad = Localidad::findOrFail($id);
 
         // retornamos respuesta
-        return response()->json(['puerto' => $puerto]);
+        return response()->json(['localidad' => $localidad]);
     }
 
     /**
@@ -96,9 +96,9 @@ class PuertosController extends Controller
      */
     public function edit($id)
     {
-        $puerto = Puerto::findOrFail($id);
+        $localidad = Localidad::findOrFail($id);
 
-        return view('puertos.edit', compact('puerto'));
+        return view('localidades.edit', compact('localidad'));
     }
 
     /**
@@ -110,8 +110,8 @@ class PuertosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Verificamos que exista el puerto
-        $puerto = Puerto::findOrFail($id);
+        // Verificamos que exista el localidad
+        $localidad = Localidad::findOrFail($id);
 
         // validamos los datos enviados
         $rules = array(
@@ -124,13 +124,13 @@ class PuertosController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // modificamos el puerto
-        $puerto->nombre = $request->nombre;
-        $puerto->direccion = $request->direccion;
-        $puerto->save();
+        // modificamos el localidad
+        $localidad->nombre = $request->nombre;
+        $localidad->direccion = $request->direccion;
+        $localidad->save();
 
         // retornamos respuesta
-        return redirect()->route('puertos.index');
+        return redirect()->route('localidades.index');
     }
 
     /**
@@ -141,14 +141,14 @@ class PuertosController extends Controller
      */
     public function destroy($id)
     {
-        // Verificamos que exista el puerto
-        $puerto = Puerto::findOrFail($id);
+        // Verificamos que exista el localidad
+        $localidad = Localidad::findOrFail($id);
 
-        // eliminamos el puerto
-        $puerto->delete();
+        // eliminamos el localidad
+        $localidad->delete();
         
         // retornamos respuesta
-        return response()->json(['status' => 'success', 'message' => 'Puerto eliminado correctamente']);
+        return response()->json(['status' => 'success', 'message' => 'localidad eliminado correctamente']);
     }
 
 }

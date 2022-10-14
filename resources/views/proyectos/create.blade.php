@@ -56,20 +56,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-2 col-xs-6 control-label">Departamento</label>
-                            <div class="col-sm-10 col-xs-6">
-                                <select id="departamento_id" name="departamento_id" class="form-control">
-                                    @foreach ($departamentos as $item)
-                                        <option value="{{ $item->id }}" @if($item->id==old('departamento_id')) selected @endif>
-                                            {{ $item->nombre }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('departamento_id') <div class="text-red">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group">
                             <label class="col-sm-2 col-xs-6 control-label">Usuario</label>
                             <div class="col-sm-10 col-xs-6">
                                 <select id="user_id" name="user_id" class="form-control">
