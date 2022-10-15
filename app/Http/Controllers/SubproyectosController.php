@@ -131,7 +131,6 @@ class SubproyectosController extends Controller
             'nombre' => 'required|string|max:150',
             'descripcion' => 'required|string|max:255',
             'codigo' => 'required|string|max:12',
-            'costo' => 'required|integer|max:2147483647',
             'contratado' => 'required|integer|max:2147483647',
         );
 
@@ -144,7 +143,6 @@ class SubproyectosController extends Controller
         $subproyecto->nombre = $request->nombre;
         $subproyecto->descripcion = $request->descripcion;
         $subproyecto->codigo = $request->codigo;
-        $subproyecto->costo = $request->costo;
         $subproyecto->contratado = $request->contratado;
         $subproyecto->save();
 

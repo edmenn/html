@@ -24,7 +24,7 @@ class PresupuestosController extends Controller
     {
         // PERMISOS PARA ROLES DE ADMINISTRADOR Y JEFE DEPARTAMENTAL
         $this->middleware('verificarRol:administracion,jefe_departamental')
-             ->only(['create', 'store', 'destroy', 'ultimoCodigo', 'editEstado', 'updateEstado']);
+             ->only(['create', 'store', 'edit', 'update', 'destroy', 'ultimoCodigo', 'editEstado', 'updateEstado']);
     }
 
     /**

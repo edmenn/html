@@ -141,7 +141,6 @@ class ProyectosController extends Controller
             'anho_fiscal' => 'required|string|max:4',
             'codigo' => 'required|string|max:12',
             'user_id' => 'required|integer|max:2147483647',
-            'costo' => 'required|integer|max:2147483647',
             'contratado' => 'required|integer|max:2147483647',
         );
 
@@ -156,7 +155,6 @@ class ProyectosController extends Controller
         $proyecto->anho_fiscal = $request->anho_fiscal;
         $proyecto->codigo = $request->codigo;
         $proyecto->user_id = $request->user_id;
-        $proyecto->costo = $request->costo;
         $proyecto->contratado = $request->contratado;
         $proyecto->save();
 

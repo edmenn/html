@@ -4,12 +4,12 @@
 
 <div class="content-wrapper">
     <section class="content-header">
-        <h1>Proyectos</h1>
+        <h1>Cancelación de Monto</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> 
-                Presupuestos
+                @if ($tipo == 'proyecto') Proyectos @else Subproyectos @endif
             </a></li>
-            <li class="active">Proyectos</li>
+            <li class="active">Cancelación de Monto</li>
         </ol>
     </section>
 
@@ -17,12 +17,14 @@
         <div class="box">
             <div class="box-header">
                 <div class="pull-left">
-                    <h3 class="box-title">Listado de Proyectos del Presupuesto 
-                        <a href="{{ route('presupuestos.index') }}">{{ $presupuesto->anho_fiscal.'_'.$presupuesto->codigo }}</a>
-                    </h3>
+                    @if ($tipo == 'proyecto')
+                    <h3 class="box-title">Cancelación de Montos del Proyecto <a href="{{ route('presupuestos.proyectos.index', $proyecto->presupuesto_id) }}">{{ $proyecto->nombre }}</a></h3>
+                    @else
+                    <h3 class="box-title">Cancelación de Montos del Subroyecto <a href="{{ route('proyectos.subproyectos.index', $subproyecto->proyecto_id) }}">{{ $subproyecto->nombre }}</a></h3>
+                    @endif
                 </div>
                 <div class="pull-right">
-                    <a href="{{ route('presupuestos.proyectos.create', $presupuesto->id) }}" class="btn btn-primary">Agregar Proyecto</a>
+                    <a href="{{ route('cancelaciones.create', ['tipo' => $tipo, 'id' => $id]) }}" class="btn btn-primary">Agregar Cancelación de Monto</a>
                 </div>
             </div>
             <div class="box-body table-responsive">
@@ -30,49 +32,27 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Año Fiscal</th>
-                            <th>Código</th>
-                            <th>Usuario</th>
-                            <th>Costo</th>
-                            <th>Estado</th>
-                            <th>Contratado</th>
+                            <th>Proyecto</th>
+                            <th>Subproyecto</th>
+                            <th>Monto Cancelado</th>
+                            <th>Motivo</th>
                             <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($proyectos as $item)    
+                        @foreach ($cancelaciones as $item)    
                         <tr>
                             <td>{{ $item->id }}</td>
-                            <td>{{ $item->nombre }}</td>
-                            <td>{{ $item->descripcion }}</td>
-                            <td>{{ $item->anho_fiscal }}</td>
-                            <td>{{ $item->codigo }}</td>
-                            <td>{{ $item->user->nombre.' '.$item->user->apellido }}</td>
-                            <td>{{ number_format($item->costo,0,',','.') }}</td>
-                            <td>{{ $item->estado->nombre }}</td>
-                            <td>{{ number_format($item->contratado,0,',','.') }}</td>
+                            <td>{{ is_null($item->proyecto_id) ? '-' : $item->proyecto->nombre }}</td>
+                            <td>{{ is_null($item->subproyecto_id) ? '-' : $item->subproyecto->nombre }}</td>
+                            <td>{{ number_format($item->monto_cancelado,0,',','.') }}</td>
+                            <td>{{ $item->motivo }}</td>
                             <td>
                                 <table>
                                     <tbody><tr>
-                                        <td class="text-center"><a href="{{ route('proyectos.subproyectos.index', $item->id) }}" class="btn btn-primary"><i class="fa fa-eye"></i> </a></td>
-                                        <td class="text-center"><a href="{{ route('presupuestos.proyectos.edit', [$presupuesto->id, $item->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
-                                        <td class="text-center"><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
+                                        <td><a href="{{ route('cancelaciones.edit', [$tipo, $item->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
+                                        <td><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
                                     </tr>
-                                    {{-- PARA ROL DE ADMIN Y JEFE DEPARTAMENTAL --}}
-                                    @if (in_array(Auth::user()->rol_id, [1,2]))
-                                    <tr>
-                                        <td colspan="3" class="text-center">
-                                            <a href="{{ route('presupuestos.proyectos.editEstado', [$presupuesto->id, $item->id]) }}" class="btn btn-default">Modificar Estado</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" class="text-center">
-                                            <a href="{{ route('cancelaciones.index', ['proyecto', $item->id]) }}" class="btn btn-warning">Montos cancelados</a>
-                                        </td>
-                                    </tr>
-                                    @endif
                                     </tbody>
                                 </table>
                             </td>
@@ -89,18 +69,18 @@
 @push('scripts')
 <script type="text/javascript">
 function eliminateHandle(id){
-    let text = "Está seguro que desea eliminar el proyecto?";
+    let text = "Está seguro que desea eliminar el registro?";
     if (confirm(text) == true) {
         try {
             let requestBody = { _token: '{{ csrf_token() }}' }
-            fetch("/presupuestos/{{ $presupuesto->id }}/proyectos/"+id, 
+            fetch("/cancelaciones/{{ $tipo }}/"+id, 
                 { method: "DELETE", headers: new Headers( {"Content-Type": "application/json"} ),
                 body: JSON.stringify( requestBody )
             })
             .then((response) => response.json())
             .then((data) => {
                 if(data.status == "success"){
-                    location.href = "{{ route('presupuestos.proyectos.index', $presupuesto->id) }}";
+                    location.href = "{{ route('cancelaciones.index', [$tipo, $id]) }}";
                 }else if(data.message){
                     alert(data.message);
                 }

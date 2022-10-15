@@ -96,7 +96,7 @@ function eliminateHandle(id){
             .then((data) => {
                 if(data.status == "success"){
                     location.href = "{{ route('presupuestos.index') }}";
-                }else if(data.status == "error"){
+                }else if(data.message){
                     alert(data.message);
                 }
             });

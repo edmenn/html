@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubproyectosTable extends Migration
+class CreateCancelacionMontoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,17 @@ class CreateSubproyectosTable extends Migration
      */
     public function up()
     {
-        Schema::create('subproyectos', function (Blueprint $table) {
+        Schema::create('cancelacion_monto', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();    // auto-increment and primary key
-            $table->integer('proyecto_id');
-            $table->string('nombre', 150);
-            $table->string('descripcion', 255);
-            $table->string('codigo', 12);
-            $table->integer('costo');
-            $table->smallInteger('estado_id');
-            $table->integer('contratado');
+            $table->integer('proyecto_id')->nullable();
+            $table->integer('subproyecto_id')->nullable();
+            $table->integer('monto_cancelado');
+            $table->text('motivo');
             $table->timestamps();
 
             // INDEXES
             $table->foreign('proyecto_id')->references('id')->on('proyectos')->onUpdate('cascade')->onDelete('restrict');
-            $table->foreign('estado_id')->references('id')->on('estados')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreign('subproyecto_id')->references('id')->on('subproyectos')->onUpdate('cascade')->onDelete('restrict');
         });
     }
 
@@ -37,6 +34,6 @@ class CreateSubproyectosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subproyectos');
+        Schema::dropIfExists('cancelacion_monto');
     }
 }

@@ -49,14 +49,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-2 col-xs-6 control-label">Costo</label>
-                            <div class="col-sm-10 col-xs-6">
-                                <input id="costo" name="costo" type="number" class="form-control" value="{{ old('costo', $subproyecto->costo) }}" />
-                                @error('costo') <div class="text-red">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group">
                             <label class="col-sm-2 col-xs-6 control-label">Contratado</label>
                             <div class="col-sm-10 col-xs-6">
                                 <input id="contratado" name="contratado" type="number" class="form-control" value="{{ old('contratado', $subproyecto->contratado) }}" />

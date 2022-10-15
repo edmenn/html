@@ -62,6 +62,11 @@
                                             <a href="{{ route('proyectos.subproyectos.editEstado', [$proyecto->id, $item->id]) }}" class="btn btn-default">Modificar Estado</a>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td colspan="3" class="text-center">
+                                            <a href="{{ route('cancelaciones.index', ['subproyecto', $item->id]) }}" class="btn btn-warning">Montos cancelados</a>
+                                        </td>
+                                    </tr>
                                     @endif
                                     </tbody>
                                 </table>
@@ -91,7 +96,7 @@ function eliminateHandle(id){
             .then((data) => {
                 if(data.status == "success"){
                     location.href = "{{ route('proyectos.subproyectos.index', $proyecto->id) }}";
-                }else if(data.status == "error"){
+                }else if(data.message){
                     alert(data.message);
                 }
             });

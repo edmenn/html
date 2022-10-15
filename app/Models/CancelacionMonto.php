@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Subproyecto extends Model
+class CancelacionMonto extends Model
 {
     use HasFactory;
 
@@ -14,7 +14,7 @@ class Subproyecto extends Model
      *
      * @var string
      */
-    protected $table = 'subproyectos';
+    protected $table = 'cancelacion_monto';
 
     /**
      * Para obtener el vinculo con la tabla proyectos
@@ -24,16 +24,9 @@ class Subproyecto extends Model
     }
 
     /**
-     * Para obtener el vinculo con la tabla estados
+     * Para obtener el vinculo con la tabla subproyectos
      */
-    public function estado(){
-        return $this->belongsTo('App\Models\Estado', 'estado_id');
-    }
-
-    /**
-     * Para obtener el vinculo con la tabla cancelacion_monto
-     */
-    public function cancelacionMontos(){
-        return $this->hasMany('App\Models\CancelacionMonto', 'subproyecto_id');
+    public function subproyecto(){
+        return $this->belongsTo('App\Models\Subproyecto', 'subproyecto_id');
     }
 }
