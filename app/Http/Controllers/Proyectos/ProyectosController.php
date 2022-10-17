@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Proyectos;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use App\Models\Presupuesto;
 use App\Models\Proyecto;
-use App\Models\Subproyecto;
 use App\Models\Departamento;
 use App\Models\User;
 use App\Models\Estado;
 
-class SubproyectosController extends Controller
+class ProyectosController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -32,13 +32,13 @@ class SubproyectosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Proyecto $proyecto)
+    public function index(Presupuesto $presupuesto)
     {
-        // obtenemos todos los subproyectos
-        $subproyectos = Subproyecto::where('proyecto_id', $proyecto->id)->get();
+        // obtenemos todos los proyectos
+        $proyectos = Proyecto::where('presupuesto_id', $presupuesto->id)->get();
 
         // retornamos respuesta
-        return view('subproyectos.index', compact('proyecto', 'subproyectos'));
+        return view('proyectos.index', compact('presupuesto', 'proyectos'));
     }
 
     /**
@@ -46,9 +46,11 @@ class SubproyectosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Proyecto $proyecto)
+    public function create(Presupuesto $presupuesto)
     {
-        return view('subproyectos.create', compact('proyecto'));
+        $usuarios = User::whereIn('rol_id', [2,3])->get();
+
+        return view('proyectos.create', compact('presupuesto', 'usuarios'));
     }
 
     /**
@@ -57,13 +59,15 @@ class SubproyectosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Proyecto $proyecto)
+    public function store(Request $request, Presupuesto $presupuesto)
     {
         // validamos los datos enviados
         $rules = array(
             'nombre' => 'required|string|max:150',
             'descripcion' => 'required|string|max:255',
+            'anho_fiscal' => 'required|string|max:4',
             'codigo' => 'required|string|max:12',
+            'user_id' => 'required|integer|max:2147483647',
             'costo' => 'required|integer|max:2147483647',
         );
 
@@ -72,18 +76,21 @@ class SubproyectosController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // creamos un nuevo subproyecto
-        $subproyecto = new Subproyecto;
-        $subproyecto->proyecto_id = $proyecto->id;
-        $subproyecto->nombre = $request->nombre;
-        $subproyecto->descripcion = $request->descripcion;
-        $subproyecto->codigo = $request->codigo;
-        $subproyecto->costo = $request->costo;
-        $subproyecto->contratado = 0;
-        $subproyecto->save();
+        // creamos un nuevo proyecto
+        $proyecto = new Proyecto;
+        $proyecto->presupuesto_id = $presupuesto->id;
+        $proyecto->nombre = $request->nombre;
+        $proyecto->descripcion = $request->descripcion;
+        $proyecto->anho_fiscal = $request->anho_fiscal;
+        $proyecto->codigo = $request->codigo;
+        $proyecto->user_id = $request->user_id;
+        $proyecto->costo = $request->costo;
+        $proyecto->contratado = 0;
+        $proyecto->estado_id = 1; // en proceso
+        $proyecto->save();
 
         // retornamos respuesta
-        return redirect()->route('proyectos.subproyectos.index', $proyecto->id);
+        return redirect()->route('presupuestos.proyectos.index', $presupuesto->id);
     }
 
     /**
@@ -92,13 +99,13 @@ class SubproyectosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Proyecto $proyecto, $id)
+    public function show(Presupuesto $presupuesto, $id)
     {
-        // chequeamos que exista el subproyecto
-        $subproyecto = Subproyecto::findOrFail($id);
+        // chequeamos que exista el proyecto
+        $proyecto = Proyecto::findOrFail($id);
 
         // retornamos respuesta
-        return response()->json(['subproyecto' => $subproyecto]);
+        return response()->json(['proyecto' => $proyecto]);
     }
 
     /**
@@ -107,11 +114,12 @@ class SubproyectosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Proyecto $proyecto, $id)
+    public function edit(Presupuesto $presupuesto, $id)
     {
-        $subproyecto = Subproyecto::findOrFail($id);
+        $proyecto = Proyecto::findOrFail($id);
+        $usuarios = User::whereIn('rol_id', [2,3])->get();
 
-        return view('subproyectos.edit', compact('proyecto', 'subproyecto'));
+        return view('proyectos.edit', compact('presupuesto', 'proyecto', 'usuarios'));
     }
 
     /**
@@ -121,16 +129,18 @@ class SubproyectosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Proyecto $proyecto, $id)
+    public function update(Request $request, Presupuesto $presupuesto, $id)
     {
-        // Verificamos que exista el subproyecto
-        $subproyecto = Subproyecto::findOrFail($id);
+        // Verificamos que exista el proyecto
+        $proyecto = Proyecto::findOrFail($id);
 
         // validamos los datos enviados
         $rules = array(
             'nombre' => 'required|string|max:150',
             'descripcion' => 'required|string|max:255',
+            'anho_fiscal' => 'required|string|max:4',
             'codigo' => 'required|string|max:12',
+            'user_id' => 'required|integer|max:2147483647',
             'contratado' => 'required|integer|max:2147483647',
         );
 
@@ -139,15 +149,17 @@ class SubproyectosController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // modificamos el subproyecto
-        $subproyecto->nombre = $request->nombre;
-        $subproyecto->descripcion = $request->descripcion;
-        $subproyecto->codigo = $request->codigo;
-        $subproyecto->contratado = $request->contratado;
-        $subproyecto->save();
+        // modificamos el proyecto
+        $proyecto->nombre = $request->nombre;
+        $proyecto->descripcion = $request->descripcion;
+        $proyecto->anho_fiscal = $request->anho_fiscal;
+        $proyecto->codigo = $request->codigo;
+        $proyecto->user_id = $request->user_id;
+        $proyecto->contratado = $request->contratado;
+        $proyecto->save();
 
         // retornamos respuesta
-        return redirect()->route('proyectos.subproyectos.index', $proyecto->id);
+        return redirect()->route('presupuestos.proyectos.index', $presupuesto->id);
     }
 
     /**
@@ -156,12 +168,12 @@ class SubproyectosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function editEstado(Proyecto $proyecto, $id)
+    public function editEstado(Presupuesto $presupuesto, $id)
     {
-        $subproyecto = Subproyecto::findOrFail($id);
+        $proyecto = Proyecto::findOrFail($id);
         $estados = Estado::all();
 
-        return view('subproyectos.edit-estado', compact('proyecto', 'subproyecto', 'estados'));
+        return view('proyectos.edit-estado', compact('presupuesto', 'proyecto', 'estados'));
     }
 
     /**
@@ -171,10 +183,10 @@ class SubproyectosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function updateEstado(Request $request, Proyecto $proyecto, $id)
+    public function updateEstado(Request $request, Presupuesto $presupuesto, $id)
     {
-        // Verificamos que exista el subproyecto
-        $subproyecto = Subproyecto::findOrFail($id);
+        // Verificamos que exista el proyecto
+        $proyecto = Proyecto::findOrFail($id);
 
         // validamos los datos enviados
         $rules = array('estado_id' => 'required|integer|max:32767');
@@ -184,12 +196,12 @@ class SubproyectosController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // modificamos el estado del subproyecto
-        $subproyecto->estado_id = $request->estado_id;
-        $subproyecto->save();
+        // modificamos el estado del proyecto
+        $proyecto->estado_id = $request->estado_id;
+        $proyecto->save();
 
         // retornamos respuesta
-        return redirect()->route('proyectos.subproyectos.index', $proyecto->id);
+        return redirect()->route('presupuestos.proyectos.index', $presupuesto->id);
     }
 
     /**
@@ -198,16 +210,16 @@ class SubproyectosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Proyecto $proyecto, $id)
+    public function destroy(Presupuesto $presupuesto, $id)
     {
-        // Verificamos que exista el subproyecto
-        $subproyecto = Subproyecto::findOrFail($id);
+        // Verificamos que exista el proyecto
+        $proyecto = Proyecto::findOrFail($id);
 
-        // eliminamos el subproyecto
-        $subproyecto->delete();
+        // eliminamos el proyecto
+        $proyecto->delete();
         
         // retornamos respuesta
-        return response()->json(['status' => 'success', 'message' => 'subproyecto eliminado correctamente']);
+        return response()->json(['status' => 'success', 'message' => 'Proyecto eliminado correctamente']);
     }
 
 }

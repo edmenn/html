@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             PresupuestoSeeder::class,
             ProyectoSeeder::class,
             SubproyectoSeeder::class,
+            TipoDocumentoSeeder::class,
         ]);
     }
 }

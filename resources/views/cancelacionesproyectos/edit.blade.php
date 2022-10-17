@@ -7,7 +7,7 @@
         <h1>Cancelación de Monto</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> 
-                @if ($tipo == 'proyecto') Proyectos @else Subproyectos @endif
+                Proyectos
             </a></li>
             <li class="active">Cancelación de Monto</li>
         </ol>
@@ -20,7 +20,7 @@
             </div>
             <div class="box-body">
 
-                <form class="form-horizontal" action="{{ route('cancelaciones.update', [$tipo, $id]) }}" method="POST">
+                <form class="form-horizontal" action="{{ route('cancelacionesproyectos.update', [$proyecto->id, $cancelacion->id]) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="card-body card-padding">
@@ -43,7 +43,7 @@
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" class="btn btn-warning">Modificar</button>
-                                <a href="{{ route('cancelaciones.index', [$tipo, $id]) }}" class="btn btn-default m-l-5">Cancelar</a>
+                                <a href="{{ route('cancelacionesproyectos.index', $proyecto->id) }}" class="btn btn-default m-l-5">Cancelar</a>
                             </div>
                         </div>
 

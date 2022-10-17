@@ -36,4 +36,11 @@ class Subproyecto extends Model
     public function cancelacionMontos(){
         return $this->hasMany('App\Models\CancelacionMonto', 'subproyecto_id');
     }
+
+    /**
+     * Para obtener el vinculo con la tabla comentarios
+     */
+    public function comentarios(){
+        return $this->hasMany('App\Models\Comentario', 'subproyecto_id');
+    }
 }

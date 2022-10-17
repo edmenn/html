@@ -43,4 +43,11 @@ class Proyecto extends Model
     public function cancelacionMontos(){
         return $this->hasMany('App\Models\CancelacionMonto', 'proyecto_id');
     }
+
+    /**
+     * Para obtener el vinculo con la tabla comentarios
+     */
+    public function comentarios(){
+        return $this->hasMany('App\Models\Comentario', 'proyecto_id');
+    }
 }

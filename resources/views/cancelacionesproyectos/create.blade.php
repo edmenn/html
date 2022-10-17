@@ -7,7 +7,7 @@
         <h1>Cancelación de Monto</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> 
-                @if ($tipo == 'proyecto') Proyectos @else Subproyectos @endif
+                Proyectos
             </a></li>
             <li class="active">Cancelación de Monto</li>
         </ol>
@@ -20,10 +20,9 @@
             </div>
             <div class="box-body">
 
-                <form class="form-horizontal" action="{{ route('cancelaciones.store', [$tipo, $id]) }}" method="POST">
+                <form class="form-horizontal" action="{{ route('cancelacionesproyectos.store', $proyecto->id) }}" method="POST">
                     @csrf
                     
-                <input type="hidden" @if ($tipo == 'proyecto') name="proyecto_id" @else name="subproyecto_id" @endif value="{{ $id }}" />
                     <div class="card-body card-padding">
                         <div class="form-group">
                             <label class="col-sm-2 col-xs-6 control-label">Monto a cancelar</label>
@@ -44,7 +43,7 @@
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" class="btn btn-primary">Guardar</button>
-                                <a href="{{ route('cancelaciones.index', [$tipo, $id]) }}" class="btn btn-default m-l-5">Cancelar</a>
+                                <a href="{{ route('cancelacionesproyectos.index', $proyecto->id) }}" class="btn btn-default m-l-5">Cancelar</a>
                             </div>
                         </div>
 

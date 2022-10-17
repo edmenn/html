@@ -4,12 +4,12 @@
 
 <div class="content-wrapper">
     <section class="content-header">
-        <h1>Cancelación de Monto</h1>
+        <h1>Comentarios</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> 
-                @if ($tipo == 'proyecto') Proyectos @else Subproyectos @endif
+                Subproyectos
             </a></li>
-            <li class="active">Cancelación de Monto</li>
+            <li class="active">Comentarios</li>
         </ol>
     </section>
 
@@ -17,14 +17,10 @@
         <div class="box">
             <div class="box-header">
                 <div class="pull-left">
-                    @if ($tipo == 'proyecto')
-                    <h3 class="box-title">Cancelación de Montos del Proyecto <a href="{{ route('presupuestos.proyectos.index', $proyecto->presupuesto_id) }}">{{ $proyecto->nombre }}</a></h3>
-                    @else
-                    <h3 class="box-title">Cancelación de Montos del Subroyecto <a href="{{ route('proyectos.subproyectos.index', $subproyecto->proyecto_id) }}">{{ $subproyecto->nombre }}</a></h3>
-                    @endif
+                    <h3 class="box-title">Comentarios del Subproyecto <a href="{{ route('proyectos.subproyectos.index', $subproyecto->proyecto_id) }}">{{ $subproyecto->nombre }}</a></h3>
                 </div>
                 <div class="pull-right">
-                    <a href="{{ route('cancelaciones.create', ['tipo' => $tipo, 'id' => $id]) }}" class="btn btn-primary">Agregar Cancelación de Monto</a>
+                    <a href="{{ route('comentariossubproyectos.create', $subproyecto->id) }}" class="btn btn-primary">Agregar Comentario</a>
                 </div>
             </div>
             <div class="box-body table-responsive">
@@ -32,25 +28,21 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Proyecto</th>
                             <th>Subproyecto</th>
-                            <th>Monto Cancelado</th>
-                            <th>Motivo</th>
+                            <th>Comentario</th>
                             <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($cancelaciones as $item)    
+                        @foreach ($comentarios as $item)    
                         <tr>
                             <td>{{ $item->id }}</td>
-                            <td>{{ is_null($item->proyecto_id) ? '-' : $item->proyecto->nombre }}</td>
-                            <td>{{ is_null($item->subproyecto_id) ? '-' : $item->subproyecto->nombre }}</td>
-                            <td>{{ number_format($item->monto_cancelado,0,',','.') }}</td>
-                            <td>{{ $item->motivo }}</td>
+                            <td>{{ $subproyecto->nombre }}</td>
+                            <td>{{ $item->comentario }}</td>
                             <td>
                                 <table>
                                     <tbody><tr>
-                                        <td><a href="{{ route('cancelaciones.edit', [$tipo, $item->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
+                                        <td><a href="{{ route('comentariossubproyectos.edit', [$subproyecto->id, $item->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
                                         <td><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
                                     </tr>
                                     </tbody>
@@ -73,14 +65,14 @@ function eliminateHandle(id){
     if (confirm(text) == true) {
         try {
             let requestBody = { _token: '{{ csrf_token() }}' }
-            fetch("/cancelaciones/{{ $tipo }}/"+id, 
+            fetch("/comentariossubproyectos/{{ $subproyecto->id }}/"+id, 
                 { method: "DELETE", headers: new Headers( {"Content-Type": "application/json"} ),
                 body: JSON.stringify( requestBody )
             })
             .then((response) => response.json())
             .then((data) => {
                 if(data.status == "success"){
-                    location.href = "{{ route('cancelaciones.index', [$tipo, $id]) }}";
+                    location.href = "{{ route('comentariossubproyectos.index', $subproyecto->id) }}";
                 }else if(data.message){
                     alert(data.message);
                 }
