@@ -33,11 +33,11 @@ class DocumentosProyectosController extends Controller
      */
     public function index(Proyecto $proyecto)
     {
-        // obtenemos todas las documentos del proyecto
+        // obtenemos todos las documentos del proyecto
         $documentos = Documento::where('proyecto_id', $proyecto->id)->get();
 
         // retornamos respuesta
-        return view('documentosproyectos.index', compact('proyecto', 'documentos'));
+        return view('proyectos.documentos.index', compact('proyecto', 'documentos'));
     }
 
     /**
@@ -48,7 +48,7 @@ class DocumentosProyectosController extends Controller
     public function create(Proyecto $proyecto)
     {
         $tipos_documento = TipoDocumento::all();
-        return view('documentosproyectos.create', compact('proyecto', 'tipos_documento'));
+        return view('proyectos.documentos.create', compact('proyecto', 'tipos_documento'));
     }
 
     /**
@@ -91,7 +91,7 @@ class DocumentosProyectosController extends Controller
         // Cargamos el archivo (ruta storage/app/public/proyectos/{proyecto_id}/ is un enlace simbolico desde public/proyectos/{proyecto_id}/)
         $path = $archivo->storeAs('public/proyectos/'.$proyecto->id, $nombre_archivo);
 
-        // creamos una nuevo documento
+        // creamos un nuevo documento
         $documento = new documento;
         $documento->proyecto_id = $proyecto->id;
         $documento->tipo_documento_id = $request->tipo_documento_id;
@@ -100,7 +100,7 @@ class DocumentosProyectosController extends Controller
         $documento->save();
 
         // retornamos respuesta
-        return redirect()->route('documentosproyectos.index', $proyecto->id);
+        return redirect()->route('proyectos.documentos.index', $proyecto->id);
     }
 
     /**

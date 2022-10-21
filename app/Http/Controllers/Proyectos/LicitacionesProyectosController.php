@@ -7,10 +7,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-use App\Models\Comentario;
+use App\Models\Licitacion;
 use App\Models\Proyecto;
+use App\Models\Proveedor;
 
-class ComentariosProyectosController extends Controller
+class LicitacionesProyectosController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -31,11 +32,11 @@ class ComentariosProyectosController extends Controller
      */
     public function index(Proyecto $proyecto)
     {
-        // obtenemos todos los comentarios del proyecto
-        $comentarios = Comentario::where('proyecto_id', $proyecto->id)->get();
+        // obtenemos todas las licitaciones del proyecto
+        $licitaciones = Licitacion::where('proyecto_id', $proyecto->id)->get();
 
         // retornamos respuesta
-        return view('proyectos.comentarios.index', compact('proyecto', 'comentarios'));
+        return view('proyectos.licitaciones.index', compact('proyecto', 'licitaciones'));
     }
 
     /**
@@ -45,7 +46,9 @@ class ComentariosProyectosController extends Controller
      */
     public function create(Proyecto $proyecto)
     {
-        return view('proyectos.comentarios.create', compact('proyecto'));
+        $proveedores = Proveedor::all();
+
+        return view('proyectos.licitaciones.create', compact('proyecto', 'proveedores'));
     }
 
     /**
@@ -57,21 +60,29 @@ class ComentariosProyectosController extends Controller
     public function store(Request $request, Proyecto $proyecto)
     {
         // validamos los datos enviados
-        $rules = array('comentario' => 'required|string');
+        $rules = array(
+            'proveedor_id' => 'required|integer|max:32767',
+            'concepto' => 'required|string|max:255',
+            'monto' => 'required|integer|max:999999999999',
+            'comentarios' => 'required|string',
+        );
 
         $validator =  Validator::make($request->input(), $rules);
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
 
-        // creamos un nuevo comentario
-        $comentario = new Comentario;
-        $comentario->proyecto_id = $proyecto->id;
-        $comentario->comentario = $request->comentario;
-        $comentario->save();
+        // creamos una nueva licitacion
+        $licitacion = new Licitacion;
+        $licitacion->proyecto_id = $proyecto->id;
+        $licitacion->proveedor_id = $request->proveedor_id;
+        $licitacion->concepto = $request->concepto;
+        $licitacion->monto = $request->monto;
+        $licitacion->comentarios = $request->comentarios;
+        $licitacion->save();
 
         // retornamos respuesta
-        return redirect()->route('proyectos.comentarios.index', $proyecto->id);
+        return redirect()->route('proyectos.licitaciones.index', $proyecto->id);
     }
 
     /**
@@ -82,11 +93,11 @@ class ComentariosProyectosController extends Controller
      */
     public function show(Proyecto $proyecto, $id)
     {
-        // chequeamos que exista el registro de comentario
-        $comentario = Comentario::findOrFail($id);
+        // chequeamos que exista el registro de licitacion
+        $licitacion = Licitacion::findOrFail($id);
         
         // retornamos respuesta
-        return response()->json(['proyecto' => $proyecto, 'comentario' => $comentario]);
+        return response()->json(['proyecto' => $proyecto, 'licitacion' => $licitacion]);
     }
 
     /**
@@ -97,10 +108,11 @@ class ComentariosProyectosController extends Controller
      */
     public function edit(Proyecto $proyecto, $id)
     {
-        // chequeamos que exista el registro de comentario
-        $comentario = Comentario::findOrFail($id);
+        // chequeamos que exista el registro de licitacion
+        $licitacion = Licitacion::findOrFail($id);
+        $proveedores = Proveedor::all();
                 
-        return view('proyectos.comentarios.edit', compact('proyecto', 'comentario'));
+        return view('proyectos.licitaciones.edit', compact('proyecto', 'licitacion', 'proveedores'));
     }
 
     /**
@@ -112,23 +124,31 @@ class ComentariosProyectosController extends Controller
      */
     public function update(Request $request, Proyecto $proyecto, $id)
     {
-        // Verificamos que exista el registro de comentario
-        $comentario = Comentario::findOrFail($id);
+        // Verificamos que exista el registro de licitacion
+        $licitacion = Licitacion::findOrFail($id);
 
         // validamos los datos enviados
-        $rules = array('comentario' => 'required|string');
+        $rules = array(
+            'proveedor_id' => 'required|integer|max:32767',
+            'concepto' => 'required|string|max:255',
+            'monto' => 'required|integer|max:999999999999',
+            'comentarios' => 'required|string',
+        );
 
         $validator =  Validator::make($request->input(), $rules);
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
 
-        // modificamos el registro de comentario
-        $comentario->comentario = $request->comentario;
-        $comentario->save();
+        // modificamos el registro de licitacion
+        $licitacion->proveedor_id = $request->proveedor_id;
+        $licitacion->concepto = $request->concepto;
+        $licitacion->monto = $request->monto;
+        $licitacion->comentarios = $request->comentarios;
+        $licitacion->save();
 
         // retornamos respuesta
-        return redirect()->route('proyectos.comentarios.index', $proyecto->id);
+        return redirect()->route('proyectos.licitaciones.index', $proyecto->id);
     }
 
     /**
@@ -139,14 +159,14 @@ class ComentariosProyectosController extends Controller
      */
     public function destroy(Proyecto $proyecto, $id)
     {
-        // Verificamos que exista el registro de comentario
-        $comentario = Comentario::findOrFail($id);
+        // Verificamos que exista el registro de licitacion
+        $licitacion = Licitacion::findOrFail($id);
 
-        // eliminamos el registro de comentario
-        $comentario->delete();
+        // eliminamos el registro de licitacion
+        $licitacion->delete();
         
         // retornamos respuesta
-        return response()->json(['status' => 'success', 'message' => 'Registro de comentario eliminado correctamente']);
+        return response()->json(['status' => 'success', 'message' => 'Registro de licitación eliminado correctamente']);
     }
 
 }

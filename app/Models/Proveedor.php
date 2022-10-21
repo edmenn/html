@@ -15,4 +15,11 @@ class Proveedor extends Model
      * @var string
      */
     protected $table = 'proveedores';
+
+    /**
+     * Para obtener el vinculo con la tabla licitaciones
+     */
+    public function licitaciones(){
+        return $this->hasMany('App\Models\Licitacion', 'proveedor_id');
+    }
 }

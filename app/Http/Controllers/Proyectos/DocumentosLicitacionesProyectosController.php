@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Subproyectos;
+namespace App\Http\Controllers\Proyectos;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Documento;
 use App\Models\TipoDocumento;
-use App\Models\Subproyecto;
+use App\Models\Proyecto;
+use App\Models\Licitacion;
 
-class DocumentosSubproyectosController extends Controller
+class DocumentosLicitacionesProyectosController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -31,13 +32,13 @@ class DocumentosSubproyectosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Subproyecto $subproyecto)
+    public function index(Licitacion $licitacion)
     {
-        // obtenemos todos las documentos del subproyecto
-        $documentos = Documento::where('subproyecto_id', $subproyecto->id)->get();
+        // obtenemos todos los documentos del proyecto
+        $documentos = Documento::where('licitacion_id', $licitacion->id)->get();
 
         // retornamos respuesta
-        return view('subproyectos.documentos.index', compact('subproyecto', 'documentos'));
+        return view('proyectos.documentoslicitaciones.index', compact('licitacion', 'documentos'));
     }
 
     /**
@@ -45,10 +46,10 @@ class DocumentosSubproyectosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Subproyecto $subproyecto)
+    public function create(Licitacion $licitacion)
     {
         $tipos_documento = TipoDocumento::all();
-        return view('subproyectos.documentos.create', compact('subproyecto', 'tipos_documento'));
+        return view('proyectos.documentoslicitaciones.create', compact('licitacion', 'tipos_documento'));
     }
 
     /**
@@ -57,7 +58,7 @@ class DocumentosSubproyectosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Subproyecto $subproyecto)
+    public function store(Request $request, Licitacion $licitacion)
     {
         $archivo = $request->file('archivo');
 
@@ -88,19 +89,19 @@ class DocumentosSubproyectosController extends Controller
         // cargamos el archivo
         $extension = $archivo->extension();
         $nombre_archivo = time().'-documento'.'.'.$extension;
-        // Cargamos el archivo (ruta storage/app/public/subproyectos/{subproyecto_id}/ is un enlace simbolico desde public/subproyectos/{subproyecto_id}/)
-        $path = $archivo->storeAs('public/subproyectos/'.$subproyecto->id, $nombre_archivo);
+        // Cargamos el archivo (ruta storage/app/public/proyectos/{licitacion_id}/ is un enlace simbolico desde public/proyectos/{licitacion_id}/)
+        $path = $archivo->storeAs('public/proyectos/licitaciones/'.$licitacion->id, $nombre_archivo);
 
         // creamos un nuevo documento
         $documento = new documento;
-        $documento->subproyecto_id = $subproyecto->id;
+        $documento->licitacion_id = $licitacion->id;
         $documento->tipo_documento_id = $request->tipo_documento_id;
         $documento->nombre = $request->nombre;
         $documento->archivo = $nombre_archivo;
         $documento->save();
 
         // retornamos respuesta
-        return redirect()->route('subproyectos.documentos.index', $subproyecto->id);
+        return redirect()->route('proyectos.documentoslicitaciones.index', $licitacion->id);
     }
 
     /**
@@ -109,15 +110,14 @@ class DocumentosSubproyectosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Subproyecto $subproyecto, $id)
+    public function destroy(Licitacion $licitacion, $id)
     {
         // Verificamos que exista el registro de documento
         $documento = Documento::findOrFail($id);
-        $x = 'puto';
 
         // eliminamos el archivo guardado
-        if (Storage::exists('public/subproyectos/'.$subproyecto->id.'/'.$documento->archivo)){
-            Storage::delete('public/subproyectos/'.$subproyecto->id.'/'.$documento->archivo);
+        if (Storage::exists('public/proyectos/licitaciones/'.$licitacion->id.'/'.$documento->archivo)){
+            Storage::delete('public/proyectos/licitaciones/'.$licitacion->id.'/'.$documento->archivo);
         }
 
         // eliminamos el registro de documento

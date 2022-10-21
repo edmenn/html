@@ -35,7 +35,7 @@ class CancelacionesProyectosController extends Controller
         $cancelaciones = CancelacionMonto::where('proyecto_id', $proyecto->id)->get();
 
         // retornamos respuesta
-        return view('cancelacionesproyectos.index', compact('proyecto', 'cancelaciones'));
+        return view('proyectos.cancelaciones.index', compact('proyecto', 'cancelaciones'));
     }
 
     /**
@@ -45,7 +45,7 @@ class CancelacionesProyectosController extends Controller
      */
     public function create(Proyecto $proyecto)
     {
-        return view('cancelacionesproyectos.create', compact('proyecto'));
+        return view('proyectos.cancelaciones.create', compact('proyecto'));
     }
 
     /**
@@ -85,7 +85,7 @@ class CancelacionesProyectosController extends Controller
         $proyecto->save();
 
         // retornamos respuesta
-        return redirect()->route('cancelacionesproyectos.index', $proyecto->id);
+        return redirect()->route('proyectos.cancelaciones.index', $proyecto->id);
     }
 
     /**
@@ -114,7 +114,7 @@ class CancelacionesProyectosController extends Controller
         // chequeamos que exista el registro de cancelacion
         $cancelacion = CancelacionMonto::findOrFail($id);
                 
-        return view('cancelacionesproyectos.edit', compact('proyecto', 'cancelacion'));
+        return view('proyectos.cancelaciones.edit', compact('proyecto', 'cancelacion'));
     }
 
     /**
@@ -161,7 +161,7 @@ class CancelacionesProyectosController extends Controller
         $proyecto->save();
 
         // retornamos respuesta
-        return redirect()->route('cancelacionesproyectos.index', $proyecto->id);
+        return redirect()->route('proyectos.cancelaciones.index', $proyecto->id);
     }
 
     /**

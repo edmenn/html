@@ -20,7 +20,7 @@
             </div>
             <div class="box-body">
 
-                <form class="form-horizontal" action="{{ route('cancelacionesproyectos.update', [$proyecto->id, $cancelacion->id]) }}" method="POST">
+                <form class="form-horizontal" action="{{ route('proyectos.cancelaciones.update', [$proyecto->id, $cancelacion->id]) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="card-body card-padding">
@@ -43,7 +43,7 @@
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" class="btn btn-warning">Modificar</button>
-                                <a href="{{ route('cancelacionesproyectos.index', $proyecto->id) }}" class="btn btn-default m-l-5">Cancelar</a>
+                                <a href="{{ route('proyectos.cancelaciones.index', $proyecto->id) }}" class="btn btn-default m-l-5">Cancelar</a>
                             </div>
                         </div>
 

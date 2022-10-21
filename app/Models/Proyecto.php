@@ -50,4 +50,18 @@ class Proyecto extends Model
     public function comentarios(){
         return $this->hasMany('App\Models\Comentario', 'proyecto_id');
     }
+
+    /**
+     * Para obtener el vinculo con la tabla documentos
+     */
+    public function documentos(){
+        return $this->hasMany('App\Models\Documento', 'proyecto_id');
+    }
+
+    /**
+     * Para obtener el vinculo con la tabla licitaciones
+     */
+    public function licitaciones(){
+        return $this->hasMany('App\Models\Licitacion', 'proyecto_id');
+    }
 }

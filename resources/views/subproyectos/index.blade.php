@@ -64,17 +64,22 @@
                                     </tr>
                                     <tr>
                                         <td colspan="3" class="text-center">
-                                            <a href="{{ route('cancelacionessubproyectos.index', $item->id) }}" class="btn btn-warning">Montos cancelados</a>
+                                            <a href="{{ route('subproyectos.cancelaciones.index', $item->id) }}" class="btn btn-warning">Montos cancelados</a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="3" class="text-center">
-                                            <a href="{{ route('comentariossubproyectos.index', $item->id) }}" class="btn btn-info">Comentarios</a>
+                                            <a href="{{ route('subproyectos.comentarios.index', $item->id) }}" class="btn btn-info">Comentarios</a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="3" class="text-center">
-                                            <a href="{{ route('documentossubproyectos.index', $item->id) }}" class="btn btn-primary">Documentos</a>
+                                            <a href="{{ route('subproyectos.documentos.index', $item->id) }}" class="btn btn-primary">Documentos</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" class="text-center">
+                                            <a href="{{ route('subproyectos.licitaciones.index', $item->id) }}" class="btn btn-success">Licitaciones</a>
                                         </td>
                                     </tr>
                                     @endif

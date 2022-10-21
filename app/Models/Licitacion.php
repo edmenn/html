@@ -5,9 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Documento extends Model
+class Licitacion extends Model
 {
     use HasFactory;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'licitaciones';
 
     /**
      * Para obtener el vinculo con la tabla proyectos
@@ -24,16 +31,16 @@ class Documento extends Model
     }
 
     /**
-     * Para obtener el vinculo con la tabla licitacions
+     * Para obtener el vinculo con la tabla proveedores
      */
-    public function licitacion(){
-        return $this->belongsTo('App\Models\Licitacion', 'licitacion_id');
+    public function proveedor(){
+        return $this->belongsTo('App\Models\Proveedor', 'proveedor_id');
     }
 
     /**
-     * Para obtener el vinculo con la tabla tipo_documento
+     * Para obtener el vinculo con la tabla documentos
      */
-    public function tipoDocumento(){
-        return $this->belongsTo('App\Models\TipoDocumento', 'tipo_documento_id');
+    public function documentos(){
+        return $this->hasMany('App\Models\Documento', 'licitacion_id');
     }
 }

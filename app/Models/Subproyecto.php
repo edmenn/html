@@ -43,4 +43,18 @@ class Subproyecto extends Model
     public function comentarios(){
         return $this->hasMany('App\Models\Comentario', 'subproyecto_id');
     }
+
+    /**
+     * Para obtener el vinculo con la tabla documentos
+     */
+    public function documentos(){
+        return $this->hasMany('App\Models\Documento', 'subproyecto_id');
+    }
+
+    /**
+     * Para obtener el vinculo con la tabla licitaciones
+     */
+    public function licitaciones(){
+        return $this->hasMany('App\Models\Licitacion', 'subproyecto_id');
+    }
 }

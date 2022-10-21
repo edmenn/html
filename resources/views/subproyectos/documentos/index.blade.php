@@ -4,12 +4,12 @@
 
 <div class="content-wrapper">
     <section class="content-header">
-        <h1>Comentarios</h1>
+        <h1>Documentos</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> 
                 Subproyectos
             </a></li>
-            <li class="active">Comentarios</li>
+            <li class="active">Documentos</li>
         </ol>
     </section>
 
@@ -17,10 +17,10 @@
         <div class="box">
             <div class="box-header">
                 <div class="pull-left">
-                    <h3 class="box-title">Comentarios del Subproyecto <a href="{{ route('proyectos.subproyectos.index', $subproyecto->proyecto_id) }}">{{ $subproyecto->nombre }}</a></h3>
+                    <h3 class="box-title">Documentos del Subproyecto <a href="{{ route('proyectos.subproyectos.index', $subproyecto->proyecto_id) }}">{{ $subproyecto->nombre }}</a></h3>
                 </div>
                 <div class="pull-right">
-                    <a href="{{ route('comentariossubproyectos.create', $subproyecto->id) }}" class="btn btn-primary">Agregar Comentario</a>
+                    <a href="{{ route('subproyectos.documentos.create', $subproyecto->id) }}" class="btn btn-primary">Agregar documento</a>
                 </div>
             </div>
             <div class="box-body table-responsive">
@@ -29,20 +29,19 @@
                         <tr>
                             <th>#</th>
                             <th>Subproyecto</th>
-                            <th>Comentario</th>
+                            <th>Documento</th>
                             <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($comentarios as $item)    
+                        @foreach ($documentos as $item)    
                         <tr>
                             <td>{{ $item->id }}</td>
                             <td>{{ $subproyecto->nombre }}</td>
-                            <td>{{ $item->comentario }}</td>
+                            <td>{{ $item->archivo }}</td>
                             <td>
                                 <table>
                                     <tbody><tr>
-                                        <td><a href="{{ route('comentariossubproyectos.edit', [$subproyecto->id, $item->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
                                         <td><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
                                     </tr>
                                     </tbody>
@@ -65,14 +64,14 @@ function eliminateHandle(id){
     if (confirm(text) == true) {
         try {
             let requestBody = { _token: '{{ csrf_token() }}' }
-            fetch("/comentariossubproyectos/{{ $subproyecto->id }}/"+id, 
+            fetch("/documentossubproyectos/{{ $subproyecto->id }}/"+id, 
                 { method: "DELETE", headers: new Headers( {"Content-Type": "application/json"} ),
                 body: JSON.stringify( requestBody )
             })
             .then((response) => response.json())
             .then((data) => {
                 if(data.status == "success"){
-                    location.href = "{{ route('comentariossubproyectos.index', $subproyecto->id) }}";
+                    location.href = "{{ route('subproyectos.documentos.index', $subproyecto->id) }}";
                 }else if(data.message){
                     alert(data.message);
                 }

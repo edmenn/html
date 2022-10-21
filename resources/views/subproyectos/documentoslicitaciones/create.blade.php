@@ -7,7 +7,7 @@
         <h1>Documentos</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> 
-                Proyectos
+                Licitaciones
             </a></li>
             <li class="active">Documentos</li>
         </ol>
@@ -20,7 +20,7 @@
             </div>
             <div class="box-body">
 
-                <form class="form-horizontal" action="{{ route('documentosproyectos.store', $proyecto->id) }}" method="POST" enctype="multipart/form-data">
+                <form class="form-horizontal" action="{{ route('subproyectos.documentoslicitaciones.store', $licitacion->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     
                     <div class="card-body card-padding">
@@ -57,7 +57,7 @@
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" class="btn btn-primary">Guardar</button>
-                                <a href="{{ route('documentosproyectos.index', $proyecto->id) }}" class="btn btn-default m-l-5">Cancelar</a>
+                                <a href="{{ route('subproyectos.documentoslicitaciones.index', $licitacion->id) }}" class="btn btn-default m-l-5">Cancelar</a>
                             </div>
                         </div>
 

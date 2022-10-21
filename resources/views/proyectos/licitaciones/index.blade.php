@@ -4,12 +4,12 @@
 
 <div class="content-wrapper">
     <section class="content-header">
-        <h1>Documentos</h1>
+        <h1>Licitaciones</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> 
-                Subproyectos
+                Proyectos
             </a></li>
-            <li class="active">Documentos</li>
+            <li class="active">Licitaciones</li>
         </ol>
     </section>
 
@@ -17,10 +17,10 @@
         <div class="box">
             <div class="box-header">
                 <div class="pull-left">
-                    <h3 class="box-title">Documentos del Subproyecto <a href="{{ route('proyectos.subproyectos.index', $subproyecto->proyecto_id) }}">{{ $subproyecto->nombre }}</a></h3>
+                    <h3 class="box-title">Licitaciones del Proyecto <a href="{{ route('presupuestos.proyectos.index', $proyecto->presupuesto_id) }}">{{ $proyecto->nombre }}</a></h3>
                 </div>
                 <div class="pull-right">
-                    <a href="{{ route('documentossubproyectos.create', $subproyecto->id) }}" class="btn btn-primary">Agregar documento</a>
+                    <a href="{{ route('proyectos.licitaciones.create', $proyecto->id) }}" class="btn btn-primary">Agregar licitación</a>
                 </div>
             </div>
             <div class="box-body table-responsive">
@@ -28,21 +28,32 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Subproyecto</th>
-                            <th>Documento</th>
+                            <th>Proyecto</th>
+                            <th>Proveedor</th>
+                            <th>Concepto</th>
+                            <th>Monto</th>
+                            <th>Comentarios</th>
                             <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($documentos as $item)    
+                        @foreach ($licitaciones as $item)    
                         <tr>
                             <td>{{ $item->id }}</td>
-                            <td>{{ $subproyecto->nombre }}</td>
-                            <td>{{ $item->archivo }}</td>
+                            <td>{{ $proyecto->nombre }}</td>
+                            <td>{{ $item->proveedor->nombre_fantasia }}</td>
+                            <td>{{ $item->concepto }}</td>
+                            <td>{{ number_format($item->monto,0,',','.') }}</td>
+                            <td>{{ $item->comentarios }}</td>
                             <td>
                                 <table>
-                                    <tbody><tr>
+                                    <tbody>
+                                    <tr>
+                                        <td><a href="{{ route('proyectos.licitaciones.edit', [$proyecto->id, $item->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
                                         <td><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><a href="{{ route('proyectos.documentoslicitaciones.index', $item->id) }}" class="btn btn-primary">Documentos </a></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -64,14 +75,14 @@ function eliminateHandle(id){
     if (confirm(text) == true) {
         try {
             let requestBody = { _token: '{{ csrf_token() }}' }
-            fetch("/documentossubproyectos/{{ $subproyecto->id }}/"+id, 
+            fetch("/licitacionesproyectos/{{ $proyecto->id }}/"+id, 
                 { method: "DELETE", headers: new Headers( {"Content-Type": "application/json"} ),
                 body: JSON.stringify( requestBody )
             })
             .then((response) => response.json())
             .then((data) => {
                 if(data.status == "success"){
-                    location.href = "{{ route('documentossubproyectos.index', $subproyecto->id) }}";
+                    location.href = "{{ route('proyectos.licitaciones.index', $proyecto->id) }}";
                 }else if(data.message){
                     alert(data.message);
                 }

@@ -20,7 +20,7 @@
             </div>
             <div class="box-body">
 
-                <form class="form-horizontal" action="{{ route('cancelacionessubproyectos.store', $subproyecto->id) }}" method="POST">
+                <form class="form-horizontal" action="{{ route('subproyectos.cancelaciones.store', $subproyecto->id) }}" method="POST">
                     @csrf
                     
                     <div class="card-body card-padding">
@@ -43,7 +43,7 @@
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" class="btn btn-primary">Guardar</button>
-                                <a href="{{ route('cancelacionessubproyectos.index', $subproyecto->id) }}" class="btn btn-default m-l-5">Cancelar</a>
+                                <a href="{{ route('subproyectos.cancelaciones.index', $subproyecto->id) }}" class="btn btn-default m-l-5">Cancelar</a>
                             </div>
                         </div>
 

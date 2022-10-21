@@ -20,7 +20,7 @@
                     <h3 class="box-title">Comentarios del Proyecto <a href="{{ route('presupuestos.proyectos.index', $proyecto->presupuesto_id) }}">{{ $proyecto->nombre }}</a></h3>
                 </div>
                 <div class="pull-right">
-                    <a href="{{ route('comentariosproyectos.create', $proyecto->id) }}" class="btn btn-primary">Agregar Comentario</a>
+                    <a href="{{ route('proyectos.comentarios.create', $proyecto->id) }}" class="btn btn-primary">Agregar Comentario</a>
                 </div>
             </div>
             <div class="box-body table-responsive">
@@ -42,7 +42,7 @@
                             <td>
                                 <table>
                                     <tbody><tr>
-                                        <td><a href="{{ route('comentariosproyectos.edit', [$proyecto->id, $item->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
+                                        <td><a href="{{ route('proyectos.comentarios.edit', [$proyecto->id, $item->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
                                         <td><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
                                     </tr>
                                     </tbody>
@@ -72,7 +72,7 @@ function eliminateHandle(id){
             .then((response) => response.json())
             .then((data) => {
                 if(data.status == "success"){
-                    location.href = "{{ route('comentariosproyectos.index', $proyecto->id) }}";
+                    location.href = "{{ route('proyectos.comentarios.index', $proyecto->id) }}";
                 }else if(data.message){
                     alert(data.message);
                 }
