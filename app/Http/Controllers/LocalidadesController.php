@@ -27,7 +27,7 @@ class LocalidadesController extends Controller
      */
     public function index()
     {
-        // obtenemos todos los localidades
+        // obtenemos todas las localidades
         $localidades = Localidad::all();
 
         // retornamos respuesta
@@ -63,7 +63,7 @@ class LocalidadesController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // creamos un nuevo localidad
+        // creamos una nueva localidad
         $localidad = new localidad;
         $localidad->nombre = $request->nombre;
         $localidad->direccion = $request->direccion;
@@ -81,7 +81,7 @@ class LocalidadesController extends Controller
      */
     public function show($id)
     {
-        // chequeamos que exista el localidad
+        // chequeamos que exista la localidad
         $localidad = Localidad::findOrFail($id);
 
         // retornamos respuesta
@@ -110,7 +110,7 @@ class LocalidadesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Verificamos que exista el localidad
+        // Verificamos que exista la localidad
         $localidad = Localidad::findOrFail($id);
 
         // validamos los datos enviados
@@ -124,7 +124,7 @@ class LocalidadesController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // modificamos el localidad
+        // modificamos la localidad
         $localidad->nombre = $request->nombre;
         $localidad->direccion = $request->direccion;
         $localidad->save();
@@ -141,14 +141,14 @@ class LocalidadesController extends Controller
      */
     public function destroy($id)
     {
-        // Verificamos que exista el localidad
+        // Verificamos que exista la localidad
         $localidad = Localidad::findOrFail($id);
 
-        // eliminamos el localidad
+        // eliminamos la localidad
         $localidad->delete();
         
         // retornamos respuesta
-        return response()->json(['status' => 'success', 'message' => 'localidad eliminado correctamente']);
+        return response()->json(['status' => 'success', 'message' => 'Localidad eliminada correctamente']);
     }
 
 }

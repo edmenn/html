@@ -43,4 +43,11 @@ class Licitacion extends Model
     public function documentos(){
         return $this->hasMany('App\Models\Documento', 'licitacion_id');
     }
+
+    /**
+     * Para obtener el vinculo con la tabla adjudicaciones
+     */
+    public function adjudicacion(){
+        return $this->hasOne('App\Models\Adjudicacion', 'licitacion_id');
+    }
 }

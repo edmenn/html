@@ -19,6 +19,7 @@ use App\Http\Controllers\Subproyectos\ComentariosSubproyectosController;
 use App\Http\Controllers\Subproyectos\LicitacionesSubproyectosController;
 use App\Http\Controllers\Subproyectos\DocumentosSubproyectosController;
 use App\Http\Controllers\Subproyectos\DocumentosLicitacionesSubproyectosController;
+use App\Http\Controllers\AdjudicacionesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -115,6 +116,9 @@ Route::middleware('auth')->group(function () {
     Route::get('documentoslicitacionessubproyectos/{licitacion}/create', [DocumentosLicitacionesSubproyectosController::class, 'create'])->name('subproyectos.documentoslicitaciones.create');
     Route::post('documentoslicitacionessubproyectos/{licitacion}/create', [DocumentosLicitacionesSubproyectosController::class, 'store'])->name('subproyectos.documentoslicitaciones.store');
     Route::delete('documentoslicitacionessubproyectos/{licitacion}/{id}', [DocumentosLicitacionesSubproyectosController::class, 'destroy'])->name('subproyectos.documentos.destroy');
+
+    Route::post('adjudicaciones/{licitacion}/create', [AdjudicacionesController::class, 'store'])->name('adjudicaciones.store');
+    Route::delete('adjudicaciones/{licitacion}/{id}', [AdjudicacionesController::class, 'destroy'])->name('adjudicaciones.destroy');
     
     Route::post('/ultimoCodigo', [PresupuestosController::class, 'ultimoCodigo'])->name('ultimoCodigo');
 });
