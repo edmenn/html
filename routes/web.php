@@ -20,6 +20,8 @@ use App\Http\Controllers\Subproyectos\LicitacionesSubproyectosController;
 use App\Http\Controllers\Subproyectos\DocumentosSubproyectosController;
 use App\Http\Controllers\Subproyectos\DocumentosLicitacionesSubproyectosController;
 use App\Http\Controllers\AdjudicacionesController;
+use App\Http\Controllers\OrdenesCompraController;
+use App\Http\Controllers\DocumentosOrdenesCompraController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,7 +86,7 @@ Route::middleware('auth')->group(function () {
     Route::get('documentoslicitacionesproyectos/{licitacion}', [DocumentosLicitacionesProyectosController::class, 'index'])->name('proyectos.documentoslicitaciones.index');
     Route::get('documentoslicitacionesproyectos/{licitacion}/create', [DocumentosLicitacionesProyectosController::class, 'create'])->name('proyectos.documentoslicitaciones.create');
     Route::post('documentoslicitacionesproyectos/{licitacion}/create', [DocumentosLicitacionesProyectosController::class, 'store'])->name('proyectos.documentoslicitaciones.store');
-    Route::delete('documentoslicitacionesproyectos/{licitacion}/{id}', [DocumentosLicitacionesProyectosController::class, 'destroy'])->name('proyectos.documentos.destroy');
+    Route::delete('documentoslicitacionesproyectos/{licitacion}/{id}', [DocumentosLicitacionesProyectosController::class, 'destroy'])->name('proyectos.documentoslicitaciones.destroy');
 
     Route::get('cancelacionessubproyectos/{subproyecto}', [CancelacionesSubproyectosController::class, 'index'])->name('subproyectos.cancelaciones.index');
     Route::get('cancelacionessubproyectos/{subproyecto}/create', [CancelacionesSubproyectosController::class, 'create'])->name('subproyectos.cancelaciones.create');
@@ -115,10 +117,16 @@ Route::middleware('auth')->group(function () {
     Route::get('documentoslicitacionessubproyectos/{licitacion}', [DocumentosLicitacionesSubproyectosController::class, 'index'])->name('subproyectos.documentoslicitaciones.index');
     Route::get('documentoslicitacionessubproyectos/{licitacion}/create', [DocumentosLicitacionesSubproyectosController::class, 'create'])->name('subproyectos.documentoslicitaciones.create');
     Route::post('documentoslicitacionessubproyectos/{licitacion}/create', [DocumentosLicitacionesSubproyectosController::class, 'store'])->name('subproyectos.documentoslicitaciones.store');
-    Route::delete('documentoslicitacionessubproyectos/{licitacion}/{id}', [DocumentosLicitacionesSubproyectosController::class, 'destroy'])->name('subproyectos.documentos.destroy');
+    Route::delete('documentoslicitacionessubproyectos/{licitacion}/{id}', [DocumentosLicitacionesSubproyectosController::class, 'destroy'])->name('subproyectos.documentoslicitaciones.destroy');
 
     Route::post('adjudicaciones/{licitacion}/create', [AdjudicacionesController::class, 'store'])->name('adjudicaciones.store');
     Route::delete('adjudicaciones/{licitacion}/{id}', [AdjudicacionesController::class, 'destroy'])->name('adjudicaciones.destroy');
+
+    Route::resource('ordenes_compra', OrdenesCompraController::class);
+    Route::get('documentosordenescompra/{orden_compra}', [DocumentosOrdenesCompraController::class, 'index'])->name('documentos.ordenes_compra.index');
+    Route::get('documentosordenescompra/{orden_compra}/create', [DocumentosOrdenesCompraController::class, 'create'])->name('documentos.ordenes_compra.create');
+    Route::post('documentosordenescompra/{orden_compra}/create', [DocumentosOrdenesCompraController::class, 'store'])->name('documentos.ordenes_compra.store');
+    Route::delete('documentosordenescompra/{orden_compra}/{id}', [DocumentosOrdenesCompraController::class, 'destroy'])->name('documentos.ordenes_compra.destroy');
     
     Route::post('/ultimoCodigo', [PresupuestosController::class, 'ultimoCodigo'])->name('ultimoCodigo');
 });

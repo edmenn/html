@@ -1,3 +1,7 @@
+<li class="header">Financiero</li>
+<li class="@if (Request::url() == route('ordenes_compra.index')) active @endif">
+    <a href="{{ route('ordenes_compra.index') }}"><i class="fa fa-list-ul"></i> <span>Órdenes de compra</span></a>
+</li>
 <li class="header">Gestión</li>
 <li class="@if (Request::url() == route('proveedores.index')) active @endif">
     <a href="{{ route('proveedores.index') }}"><i class="fa fa-industry"></i> <span>Proveedores</span></a>

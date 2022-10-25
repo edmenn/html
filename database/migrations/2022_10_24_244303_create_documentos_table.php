@@ -18,6 +18,7 @@ class CreateDocumentosTable extends Migration
             $table->integer('proyecto_id')->nullable();
             $table->integer('subproyecto_id')->nullable();
             $table->integer('licitacion_id')->nullable();
+            $table->integer('orden_compra_id')->nullable();
             $table->smallInteger('tipo_documento_id');
             $table->string('nombre', 50);
             $table->string('archivo', 50);
@@ -28,6 +29,7 @@ class CreateDocumentosTable extends Migration
             $table->foreign('subproyecto_id')->references('id')->on('subproyectos')->onUpdate('cascade')->onDelete('restrict');
             $table->foreign('licitacion_id')->references('id')->on('licitaciones')->onUpdate('cascade')->onDelete('restrict');
             $table->foreign('tipo_documento_id')->references('id')->on('tipo_documento')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreign('orden_compra_id')->references('id')->on('ordenes_compra')->onUpdate('cascade')->onDelete('restrict');
         });
     }
 

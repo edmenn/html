@@ -36,4 +36,11 @@ class Documento extends Model
     public function tipoDocumento(){
         return $this->belongsTo('App\Models\TipoDocumento', 'tipo_documento_id');
     }
+
+    /**
+     * Para obtener el vinculo con la tabla ordenes_compras
+     */
+    public function ordenCompra(){
+        return $this->belongsTo('App\Models\OrdenCompra', 'orden_compra_id');
+    }
 }

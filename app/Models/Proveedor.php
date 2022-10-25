@@ -22,4 +22,11 @@ class Proveedor extends Model
     public function licitaciones(){
         return $this->hasMany('App\Models\Licitacion', 'proveedor_id');
     }
+
+    /**
+     * Para obtener el vinculo con la tabla ordenes_compra
+     */
+    public function ordenesCompra(){
+        return $this->hasMany('App\Models\OrdenCompra', 'proveedor_id');
+    }
 }
