@@ -22,9 +22,9 @@ class ProyectosController extends Controller
      */
     public function __construct()
     {
-        // PERMISOS PARA ROLES DE ADMINISTRADOR Y JEFE DEPARTAMENTAL
-        $this->middleware('verificarRol:administracion,jefe_departamental')
-             ->only(['create', 'store', 'destroy', 'editEstado', 'updateEstado']);
+        // PERMISOS PARA ROLES DE ADMINISTRADOR, JEFE DEPARTAMENTAL Y ORDEN DE COMPRA
+        $this->middleware('verificarRol:administracion,jefe_departamental')->only(['create', 'store', 'edit', 'update', 'destroy']);
+        $this->middleware('verificarRol:administracion,orden_compra')->only(['editEstado', 'updateEstado']);
     }
 
     /**

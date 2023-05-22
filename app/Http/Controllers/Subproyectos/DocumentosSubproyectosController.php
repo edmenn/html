@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Documento;
-use App\Models\TipoDocumento;
 use App\Models\Subproyecto;
 
 class DocumentosSubproyectosController extends Controller
@@ -47,8 +46,7 @@ class DocumentosSubproyectosController extends Controller
      */
     public function create(Subproyecto $subproyecto)
     {
-        $tipos_documento = TipoDocumento::all();
-        return view('subproyectos.documentos.create', compact('subproyecto', 'tipos_documento'));
+        return view('subproyectos.documentos.create', compact('subproyecto'));
     }
 
     /**
@@ -63,7 +61,6 @@ class DocumentosSubproyectosController extends Controller
 
         // validamos los datos enviados
         $rules = array(
-            'tipo_documento_id' => 'required|integer|max:32767',
             'nombre' => 'required|string|max:50',
         );
 
@@ -85,8 +82,15 @@ class DocumentosSubproyectosController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
+        $extension = strtolower($archivo->extension());
+        $extensiones_permitidas = array('jpg', 'jpeg', 'png', 'heic', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'pptx');
+        if (!in_array($extension, $extensiones_permitidas)) {
+            $validator->errors()->add('archivo', "ERROR DE CARGA: Tipo de archivo no permitido (se cargó .$extension).\n".
+                                                "TIPOS DE ARCHIVO PERMITIDOS: .jpg, .jpeg, .png, .heic, .pdf, .doc, .docx, .xls, .xlsx, .pptx.");
+            return back()->withErrors($validator)->withInput();
+        }
+
         // cargamos el archivo
-        $extension = $archivo->extension();
         $nombre_archivo = time().'-documento'.'.'.$extension;
         // Cargamos el archivo (ruta storage/app/public/subproyectos/{subproyecto_id}/ is un enlace simbolico desde public/subproyectos/{subproyecto_id}/)
         $path = $archivo->storeAs('public/subproyectos/'.$subproyecto->id, $nombre_archivo);
@@ -94,7 +98,7 @@ class DocumentosSubproyectosController extends Controller
         // creamos un nuevo documento
         $documento = new documento;
         $documento->subproyecto_id = $subproyecto->id;
-        $documento->tipo_documento_id = $request->tipo_documento_id;
+        $documento->tipo_documento_id = 1;  // por defecto el valor 1, actualmente no se selecciona el tipo de documento
         $documento->nombre = $request->nombre;
         $documento->archivo = $nombre_archivo;
         $documento->save();

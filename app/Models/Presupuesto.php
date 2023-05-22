@@ -43,4 +43,28 @@ class Presupuesto extends Model
     public function proyectos(){
         return $this->hasMany('App\Models\Proyecto', 'presupuesto_id');
     }
+
+    /**
+     * Filtros utilizados en la tabla presupuestos
+     */
+    public function scopeLocalidadWhere($query, $localidad)
+    {
+        if ($localidad) { return $query->where('localidad_id', $localidad); }
+        return $query;
+    }
+    public function scopeDepartamentoWhere($query, $departamento)
+    {
+        if ($departamento) { return $query->where('departamento_id', $departamento); }
+        return $query;
+    }
+    public function scopeEstadoWhere($query, $estado)
+    {
+        if ($estado) { return $query->where('estado_id', $estado); }
+        return $query;
+    }
+    public function scopeAnhoFiscalWhere($query, $anho_fiscal)
+    {
+        if ($anho_fiscal) { return $query->where('anho_fiscal', $anho_fiscal); }
+        return $query;
+    }
 }

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Presupuesto;
+use Faker;
 
 class PresupuestoSeeder extends Seeder
 {
@@ -14,6 +15,9 @@ class PresupuestoSeeder extends Seeder
      */
     public function run()
     {
+        $faker = Faker\Factory::create('es_AR');
+        $faker->seed(1234);
+
         Presupuesto::create([
             'anho_fiscal' => 2021,
             'codigo' => 1,
@@ -50,5 +54,21 @@ class PresupuestoSeeder extends Seeder
             'estado_id' => 1,
             'tipo' => 'CAPEX',
         ]);
+
+        $tipo = array('CAPEX', 'OPEX');
+        for ($i=1; $i <= 150; $i++) { 
+            Presupuesto::create([
+                'anho_fiscal' => $faker->numberBetween(2018, 2023),
+                'codigo' => $i,
+                'localidad_id' => $faker->numberBetween(1, 7),
+                'nombre' => $faker->sentence($nbWords = 6, $variableNbWords = true),
+                'descripcion' => $faker->paragraph($nbSentences = 3, $variableNbSentences = true),
+                'departamento_id' => $faker->numberBetween(1, 3),
+                'responsable_id' => $faker->numberBetween(1, 36),
+                'costo' => $faker->numberBetween(200000000, 1000000000),
+                'estado_id' => $faker->numberBetween(1, 3),
+                'tipo' => $tipo[$faker->numberBetween(0, 1)],
+            ]);
+        }
     }
 }

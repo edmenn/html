@@ -32,13 +32,39 @@ class PresupuestosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // obtenemos todos los presupuestos
-        $presupuestos = Presupuesto::all();
+        // obtenemos los parametros
+        $mostrar = $request->input('mostrar');
+        $mostrar = is_null($mostrar) ? 10 : $mostrar;
+        $localidad = $request->input('localidad');
+        $departamento = $request->input('departamento');
+        $anho_fiscal = $request->input('anho_fiscal');
+        $estado = $request->input('estado');
+
+        // definimos los filtros
+        $localidades = Localidad::all();
+        $departamentos = Departamento::all();
+        $estados = Estado::all();
+        $anho_fiscales = Presupuesto::selectRaw('distinct(anho_fiscal)')->pluck('anho_fiscal');
+
+        // obtenemos los presupuestos
+        $presupuestos = Presupuesto::with(['localidad:id,nombre', 'departamento:id,nombre', 
+                            'responsable:id,nombre,apellido', 'estado:id,nombre'])
+                        ->localidadWhere($localidad)
+                        ->departamentoWhere($departamento)
+                        ->anhoFiscalWhere($anho_fiscal)
+                        ->estadoWhere($estado)
+                        ->paginate($mostrar)
+                        ->appends('mostrar', $mostrar)
+                        ->appends('localidad', $localidad)
+                        ->appends('departamento', $departamento)
+                        ->appends('anho_fiscal', $anho_fiscal)
+                        ->appends('estado', $estado);
 
         // retornamos respuesta
-        return view('presupuestos.index', compact('presupuestos'));
+        return view('presupuestos.index', compact('presupuestos', 'localidades', 'departamentos', 'estados', 
+                    'anho_fiscales', 'mostrar', 'localidad', 'departamento', 'anho_fiscal', 'estado'));
     }
 
     /**

@@ -25,20 +25,6 @@
                     
                     <div class="card-body card-padding">
                         <div class="form-group">
-                            <label class="col-sm-2 col-xs-6 control-label">Tipo de Documento</label>
-                            <div class="col-sm-10 col-xs-6">
-                                <select id="tipo_documento_id" name="tipo_documento_id" class="form-control">
-                                    @foreach ($tipos_documento as $item)
-                                        <option value="{{ $item->id }}" @if($item->id==old('tipo_documento_id')) selected @endif>
-                                            {{ $item->nombre }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('tipo_documento_id') <div class="text-red">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group">
                             <label class="col-sm-2 col-xs-6 control-label">Nombre</label>
                             <div class="col-sm-10 col-xs-6">
                                 <input id="nombre" name="nombre" type="text" class="form-control" value="{{ old('nombre') }}" />

@@ -60,13 +60,14 @@
                                         <td class="text-center"><a href="{{ route('presupuestos.proyectos.edit', [$presupuesto->id, $item->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
                                         <td class="text-center"><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
                                     </tr>
-                                    {{-- PARA ROL DE ADMIN Y JEFE DEPARTAMENTAL --}}
-                                    @if (in_array(Auth::user()->rol_id, [1,2]))
-                                    <tr>
+                                    {{-- PARA ROL DE ADMIN Y COMPRAS --}}
+                                    @if ( Auth::user()->rol_id === 1 OR Auth::user()->rol_id === 4 )
+                                    </tr>
                                         <td colspan="3" class="text-center">
                                             <a href="{{ route('presupuestos.proyectos.editEstado', [$presupuesto->id, $item->id]) }}" class="btn btn-default">Modificar Estado</a>
                                         </td>
-                                    </tr>
+                                    <tr>    
+                                    @endif
                                     <tr>
                                         <td colspan="3" class="text-center">
                                             <a href="{{ route('proyectos.cancelaciones.index', $item->id) }}" class="btn btn-warning">Montos cancelados</a>
@@ -87,7 +88,6 @@
                                             <a href="{{ route('proyectos.licitaciones.index', $item->id) }}" class="btn btn-success">Licitaciones</a>
                                         </td>
                                     </tr>
-                                    @endif
                                     </tbody>
                                 </table>
                             </td>

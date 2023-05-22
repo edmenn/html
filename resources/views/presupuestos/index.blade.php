@@ -24,57 +24,107 @@
                 </div>
             </div>
             <div class="box-body table-responsive">
-                <table id="tabla" class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Código</th>
-                            <th>Localidad</th>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Tipo</th>
-                            <th>Costo</th>
-                            <th>Departamento</th>
-                            <th>Responsable</th>
-                            <th>Estado</th>
-                            <th class="text-center">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($presupuestos as $item)    
-                        <tr>
-                            <td>{{ $item->id }}</td>
-                            <td>{{ $item->anho_fiscal .'-'. sprintf("%03d", $item->codigo) }}</td>
-                            <td>{{ $item->localidad->nombre }}</td>
-                            <td>{{ $item->nombre }}</td>
-                            <td>{{ $item->descripcion }}</td>
-                            <td>{{ $item->tipo }}</td>
-                            <td>{{ 'Gs. '.number_format($item->costo,0,',','.') }}</td>
-                            <td>{{ $item->departamento->nombre }}</td>
-                            <td>{{ $item->responsable->nombre.' '.$item->responsable->apellido }}</td>
-                            <td>{{ $item->estado->nombre }}</td>
-                            <td>
-                                <table>
-                                    <tbody><tr>
-                                        <td class="text-center"><a href="{{ route('presupuestos.proyectos.index', $item->id) }}" class="btn btn-primary"><i class="fa fa-eye"></i> </a></td>
-                                        <td class="text-center"><a href="{{ route('presupuestos.edit', $item->id) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
-                                        <td class="text-center"><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
-                                    </tr>
-                                    {{-- PARA ROL DE ADMIN Y JEFE DEPARTAMENTAL --}}
-                                    @if (in_array(Auth::user()->rol_id, [1,2]))
-                                    </tr>
-                                        <td colspan="3" class="text-center">
-                                            <a href="{{ route('presupuestos.editEstado', $item->id) }}" class="btn btn-default">Modificar Estado</a>
-                                        </td>
-                                    <tr>    
-                                    @endif
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div id="tabla_wrapper" class="dataTables_wrapper no-footer">
+                    <form id="fo1" method="GET">
+                    @csrf
+                    <div class="dataTables_length" id="mostrar">
+                        <label>Mostrar <select name="mostrar" aria-controls="tabla" onChange="document.getElementById('fo1').submit();">
+                            @foreach ([10, 25, 50, 100] as $item)
+                                <option value="{{$item}}" {{ $item == $mostrar ? "selected" : null }}>{{$item}}</option>
+                            @endforeach
+                        </select> registros</label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <select id="localidad" name="localidad" class="form-control" onChange="document.getElementById('fo1').submit();">
+                                <option value="">Localidad (todos)</option>
+                                @foreach ($localidades as $item)
+                                    <option value="{{ $item->id }}" {{ $item->id==$localidad? 'selected' : null }}>{{ $item->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="departamento" name="departamento" class="form-control" onChange="document.getElementById('fo1').submit();">
+                                <option value="">Departamento (todos)</option>
+                                @foreach ($departamentos as $item)
+                                    <option value="{{ $item->id }}" {{ $item->id==$departamento? 'selected' : null }}>{{ $item->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="anho_fiscal" name="anho_fiscal" class="form-control" onChange="document.getElementById('fo1').submit();">
+                                <option value="">Año fiscal (todos)</option>
+                                @foreach ($anho_fiscales as $item)
+                                    <option value="{{ $item }}" {{ $item==$anho_fiscal? 'selected' : null }}>{{ $item }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="estado" name="estado" class="form-control" onChange="document.getElementById('fo1').submit();">
+                                <option value="">Estado (todos)</option>
+                                @foreach ($estados as $item)
+                                    <option value="{{ $item->id }}" {{ $item->id==$estado? 'selected' : null }}>{{ $item->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    </form>
+                    <table id="tabla" class="table table-bordered table-hover m-t-10">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Código</th>
+                                <th>Localidad</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Tipo</th>
+                                <th>Costo</th>
+                                <th>Departamento</th>
+                                <th>Responsable</th>
+                                <th>Estado</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php $index = 0 @endphp
+                            @foreach ($presupuestos as $item)    
+                            <tr>
+                                @php ++$index @endphp
+                                <td>{{ ($presupuestos->currentPage() -1) * $mostrar + $index }}</td>
+                                <td>{{ $item->anho_fiscal .'-'. sprintf("%03d", $item->codigo) }}</td>
+                                <td>{{ $item->localidad->nombre }}</td>
+                                <td>{{ $item->nombre }}</td>
+                                <td>{{ $item->descripcion }}</td>
+                                <td>{{ $item->tipo }}</td>
+                                <td>{{ 'Gs. '.number_format($item->costo,0,',','.') }}</td>
+                                <td>{{ $item->departamento->nombre }}</td>
+                                <td>{{ $item->responsable->nombre.' '.$item->responsable->apellido }}</td>
+                                <td>{{ $item->estado->nombre }}</td>
+                                <td>
+                                    <table>
+                                        <tbody><tr>
+                                            <td class="text-center"><a href="{{ route('presupuestos.proyectos.index', $item->id) }}" class="btn btn-primary"><i class="fa fa-eye"></i> </a></td>
+                                            <td class="text-center"><a href="{{ route('presupuestos.edit', $item->id) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
+                                            <td class="text-center"><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
+                                        </tr>
+                                        {{-- PARA ROL DE ADMIN Y JEFE DEPARTAMENTAL (del departamento del presupuesto) --}}
+                                        @if ( Auth::user()->rol_id === 1 OR (Auth::user()->rol_id === 2 && Auth::user()->departamento_id===$item->departamento_id) )
+                                        </tr>
+                                            <td colspan="3" class="text-center">
+                                                <a href="{{ route('presupuestos.editEstado', $item->id) }}" class="btn btn-default">Modificar Estado</a>
+                                            </td>
+                                        <tr>    
+                                        @endif
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    {{ $presupuestos->onEachSide(1)->links() }}
+                </div>
             </div>
         </div>
     </section>
@@ -106,33 +156,6 @@ function eliminateHandle(id){
         }
     }
 }
-document.addEventListener('DOMContentLoaded', function () {
-    let table = new DataTable('#tabla', {
-        language: {
-            "decimal":        ",",
-            "emptyTable":     "No hay datos disponibles en la tabla",
-            "info":           "Mostrando _START_ a _END_ de _TOTAL_ registros",
-            "infoEmpty":      "Mostrando 0 a 0 de 0 registros",
-            "infoFiltered":   "(filtrado de _MAX_ registros totales)",
-            "infoPostFix":    "",
-            "thousands":      ".",
-            "lengthMenu":     "Mostrar _MENU_ registros",
-            "loadingRecords": "Cargando...",
-            "processing":     "",
-            "search":         "Buscar:",
-            "zeroRecords":    "No se encontraron registros coincidentes",
-            "paginate": {
-                "first":      "Primero",
-                "last":       "Último",
-                "next":       "Siguiente",
-                "previous":   "Anterior"
-            },
-            "aria": {
-                "sortAscending":  ": activar para orden ascendente",
-                "sortDescending": ": activar para orden descendente"
-            }
-        }
-    });
-});
+
 </script>
 @endpush
