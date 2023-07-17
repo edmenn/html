@@ -64,7 +64,7 @@ class Presupuesto extends Model
     }
     public function scopeAnhoFiscalWhere($query, $anho_fiscal)
     {
-        if ($anho_fiscal) { return $query->where('anho_fiscal', $anho_fiscal); }
+        if ($anho_fiscal) { return $query->where('presupuestos.anho_fiscal', $anho_fiscal); }
         return $query;
     }
 }

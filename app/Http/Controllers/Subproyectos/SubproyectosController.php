@@ -80,6 +80,7 @@ class SubproyectosController extends Controller
         $subproyecto->codigo = $request->codigo;
         $subproyecto->costo = $request->costo;
         $subproyecto->contratado = 0;
+        $subproyecto->estado_id = 1; // en proceso
         $subproyecto->save();
 
         // retornamos respuesta

@@ -22,6 +22,8 @@ use App\Http\Controllers\Subproyectos\DocumentosLicitacionesSubproyectosControll
 use App\Http\Controllers\AdjudicacionesController;
 use App\Http\Controllers\OrdenesCompraController;
 use App\Http\Controllers\DocumentosOrdenesCompraController;
+use App\Http\Controllers\GraficosController;
+use App\Http\Controllers\ReportesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -127,6 +129,14 @@ Route::middleware('auth')->group(function () {
     Route::get('documentosordenescompra/{orden_compra}/create', [DocumentosOrdenesCompraController::class, 'create'])->name('documentos.ordenes_compra.create');
     Route::post('documentosordenescompra/{orden_compra}/create', [DocumentosOrdenesCompraController::class, 'store'])->name('documentos.ordenes_compra.store');
     Route::delete('documentosordenescompra/{orden_compra}/{id}', [DocumentosOrdenesCompraController::class, 'destroy'])->name('documentos.ordenes_compra.destroy');
+
+    Route::post('graficos/barra/presupuestoVsGasto/data', [GraficosController::class, 'barraPresupuestoVsGastoData'])->name('barra.presupuestoVsGastoData');
+    Route::post('graficos/barra/licitacionesProveedor/data', [GraficosController::class, 'barralicitacionesProveedorData'])->name('barra.licitacionesProveedorData');
+    Route::post('graficos/pastel/gastosProyecto/data', [GraficosController::class, 'pastelGastosProyectoData'])->name('pastel.gastosProyectoData');
+    
+    Route::get('reportes/presupuesto', [ReportesController::class, 'presupuesto'])->name('reportes.presupuesto');
+    Route::get('reportes/gasto', [ReportesController::class, 'gasto'])->name('reportes.gasto');
+    Route::get('reportes/presupuestoRestante', [ReportesController::class, 'presupuestoRestante'])->name('reportes.presupuestoRestante');
     
     Route::post('/ultimoCodigo', [PresupuestosController::class, 'ultimoCodigo'])->name('ultimoCodigo');
 });

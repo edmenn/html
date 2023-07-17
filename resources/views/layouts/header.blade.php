@@ -50,6 +50,18 @@
             <li class="@if (Request::url() == route('dashboard')) active @endif">
                 <a href="/"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
             </li>
+            @if (Auth::user()->rol_id == 1) 
+                <li class="header">Reportes</li>
+                <li class="@if (Request::url() == route('reportes.presupuesto')) active @endif">
+                    <a href="{{ route('reportes.presupuesto') }}"><i class="fa fa-list"></i> <span>Presupuesto</span></a>
+                </li>
+                <li class="@if (Request::url() == route('reportes.gasto')) active @endif">
+                    <a href="{{ route('reportes.gasto') }}"><i class="fa fa-list"></i> <span>Gasto</span></a>
+                </li>
+                <li class="@if (Request::url() == route('reportes.presupuestoRestante')) active @endif">
+                    <a href="{{ route('reportes.presupuestoRestante') }}"><i class="fa fa-list"></i> <span>Presupuesto Restante</span></a>
+                </li>
+            @endif
             <li class="header">Proyectos</li>
             <li class="@if (Request::url() == route('presupuestos.index')) active @endif">
                 <a href="{{ route('presupuestos.index') }}"><i class="fa fa-list-alt"></i> <span>Presupuestos</span></a>

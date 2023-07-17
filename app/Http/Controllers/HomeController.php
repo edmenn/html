@@ -7,6 +7,9 @@ use App\Models\Localidad;
 use App\Models\User;
 use App\Models\Presupuesto;
 use App\Models\Proveedor;
+use App\Models\Proyecto;
+use App\Models\Subproyecto;
+use App\Models\Adjudicacion;
 
 class HomeController extends Controller
 {
@@ -20,12 +23,14 @@ class HomeController extends Controller
             return redirect()->route('login');
         }
 
-        $localidades = Localidad::all()->count();
-        $users = User::all()->count();
-        $presupuestos = Presupuesto::all()->count();
-        $proveedores = Proveedor::all()->count();
+        $anho_fiscal = Presupuesto::select('anho_fiscal')
+                ->groupBy('anho_fiscal')
+                ->get();
+        $proveedores = Proveedor::all();
+        $presupuestos = Presupuesto::all();
+        $presupuesto = $presupuestos->first()->id;
 
-        return view('dashboard', compact('localidades', 'users', 'presupuestos', 'proveedores'));
+        return view('dashboard', compact('anho_fiscal', 'proveedores', 'presupuestos', 'presupuesto'));
     }
 
 }
