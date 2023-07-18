@@ -22,7 +22,7 @@
     <div class="hold-transition login-page">
         <div class="login-box">
             <div class="login-logo">
-                <b>GESTAPP</b>
+                <img src="{{ asset('images/logo2.png')}}" />
             </div>
             <!-- /.login-logo -->
             <div class="login-box-body">

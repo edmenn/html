@@ -3238,6 +3238,10 @@ table.text-center th {
   margin-bottom: 25px;
   font-weight: 300;
 }
+.login-logo {
+  margin-bottom: -25px;
+  margin-top: -25px;
+}
 .login-logo a,
 .register-logo a {
   color: #444;
@@ -5095,3 +5099,4 @@ button.logout .fa.fa-sign-out { padding-right: 4px;}
     line-height: 2rem !important;
     margin: 0.166rem !important;
 }
+textarea { resize: none; }

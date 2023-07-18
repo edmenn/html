@@ -9,6 +9,9 @@
 <li class="@if (Request::url() == route('localidades.index')) active @endif">
     <a href="{{ route('localidades.index') }}"><i class="fa fa-building"></i> <span>Localidades</span></a>
 </li>
+<li class="@if (Request::url() == route('departamentos.index')) active @endif">
+    <a href="{{ route('departamentos.index') }}"><i class="fa fa-users"></i> <span>Departamentos</span></a>
+</li>
 <li class="@if (Request::url() == route('users.index')) active @endif">
     <a href="{{ route('users.index') }}"><i class="fa fa-user"></i> <span>Usuarios</span></a>
 </li>

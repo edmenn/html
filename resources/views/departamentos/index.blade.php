@@ -4,12 +4,12 @@
 
 <div class="content-wrapper">
     <section class="content-header">
-        <h1>Localidades</h1>
+        <h1>Departamentos</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> 
-                Localidades
+                Departamentos
             </a></li>
-            <li class="active">Localidades</li>
+            <li class="active">Departamentos</li>
         </ol>
     </section>
 
@@ -17,10 +17,10 @@
         <div class="box">
             <div class="box-header">
                 <div class="pull-left">
-                    <h3 class="box-title">Listado de Localidades</h3>
+                    <h3 class="box-title">Listado de Departamentos</h3>
                 </div>
                 <div class="pull-right">
-                    <a href="{{ route('localidades.create') }}" class="btn btn-primary">Agregar localidad</a>
+                    <a href="{{ route('departamentos.create') }}" class="btn btn-primary">Agregar Departamento</a>
                 </div>
             </div>
             <div class="box-body table-responsive">
@@ -29,20 +29,18 @@
                         <tr>
                             <th>#</th>
                             <th>Nombre</th>
-                            <th>Dirección</th>
                             <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($localidades as $item)    
+                        @foreach ($departamentos as $item)    
                         <tr>
                             <td>{{ $item->id }}</td>
                             <td>{{ $item->nombre }}</td>
-                            <td>{{ $item->direccion }}</td>
                             <td>
                                 <table>
                                     <tbody><tr>
-                                        <td class="text-center"><a href="{{ route('localidades.edit', $item->id) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
+                                        <td class="text-center"><a href="{{ route('departamentos.edit', $item->id) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> </a></td>
                                         <td class="text-center"><button onclick="eliminateHandle({{ $item->id }})" class="btn btn-danger"><i class="fa fa-trash"></i> </button></td>
                                     </tr></tbody>
                                 </table>
@@ -60,18 +58,20 @@
 @push('scripts')
 <script type="text/javascript">
 function eliminateHandle(id){
-    let text = "Está seguro que desea eliminar la localidad?";
+    let text = "Está seguro que desea eliminar el departamento?";
     if (confirm(text) == true) {
         try {
             let requestBody = { _token: '{{ csrf_token() }}' }
-            fetch("/localidades/"+id, 
+            fetch("/departamentos/"+id, 
                 { method: "DELETE", headers: new Headers( {"Content-Type": "application/json"} ),
                 body: JSON.stringify( requestBody )
             })
             .then((response) => response.json())
             .then((data) => {
                 if(data.status == "success"){
-                    location.href = "{{ route('localidades.index') }}";
+                    location.href = "{{ route('departamentos.index') }}";
+                }else if(data.message){
+                    alert(data.message);
                 }
             });
         } catch (error) {

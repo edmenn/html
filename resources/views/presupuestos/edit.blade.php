@@ -112,7 +112,7 @@
                                 <select id="responsable_id" name="responsable_id" class="form-control">
                                     @foreach ($usuarios as $item)
                                         <option value="{{ $item->id }}" @if($item->id==old('responsable_id', $presupuesto->responsable_id)) selected @endif>
-                                            {{ $item->nombre }}
+                                            {{ $item->nombre.' '.$item->apellido }}
                                         </option>
                                     @endforeach
                                 </select>

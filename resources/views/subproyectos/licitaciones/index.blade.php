@@ -55,6 +55,13 @@
                                         <tr>
                                             <td colspan="2"><a href="{{ route('subproyectos.documentoslicitaciones.index', $item->id) }}" class="btn btn-primary">Documentos </a></td>
                                         </tr>
+                                        <tr>
+                                        @if (is_null($item->adjudicacion))
+                                            <td colspan="2"><button onclick="adjudicar({{ $item->id }})" class="btn btn-success">Adjudicar </button></td>
+                                        @else
+                                            <td colspan="2"><button onclick="eliminarAdjudicacion({{ $item->id.','.$item->adjudicacion->id }})" class="btn btn-default">Eliminar Adjudicación </button></td>
+                                        @endif
+                                    </tr>
                                     </tbody>
                                 </table>
                             </td>
@@ -91,6 +98,46 @@ function eliminateHandle(id){
             alert("Advertencia: Ocurrio un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina");
             console.log(error);
         }
+    }
+}
+function adjudicar(id){
+    try {
+        let requestBody = { _token: '{{ csrf_token() }}' }
+        fetch("/adjudicaciones/"+id+"/create", 
+            { method: "POST", headers: new Headers( {"Content-Type": "application/json"} ),
+            body: JSON.stringify( requestBody )
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.status == "success"){
+                location.reload();
+            }else if(data.message){
+                alert(data.message);
+            }
+        });
+    } catch (error) {
+        alert("Advertencia: Ocurrio un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina");
+        console.log(error);
+    }
+}
+function eliminarAdjudicacion(licitacion_id, id){
+    try {
+        let requestBody = { _token: '{{ csrf_token() }}' }
+        fetch("/adjudicaciones/"+licitacion_id+"/"+id, 
+            { method: "DELETE", headers: new Headers( {"Content-Type": "application/json"} ),
+            body: JSON.stringify( requestBody )
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.status == "success"){
+                location.reload();
+            }else if(data.message){
+                alert(data.message);
+            }
+        });
+    } catch (error) {
+        alert("Advertencia: Ocurrio un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina");
+        console.log(error);
     }
 }
 document.addEventListener('DOMContentLoaded', function () {

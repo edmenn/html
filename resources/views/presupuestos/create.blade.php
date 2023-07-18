@@ -111,7 +111,7 @@
                                 <select id="responsable_id" name="responsable_id" class="form-control">
                                     @foreach ($usuarios as $item)
                                         <option value="{{ $item->id }}" @if($item->id==old('responsable_id')) selected @endif>
-                                            {{ $item->nombre }}
+                                            {{ $item->nombre.' '.$item->apellido }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -145,7 +145,7 @@
 let anho_fiscal = document.getElementById("anho_fiscal");
 anho_fiscal.addEventListener("change", function() {
     try {
-        let requestBody = { _token: '{{ csrf_token() }}', anho_fiscal: anho_fiscal.value }
+        let requestBody = { token: '{{ csrf_token() }}', anho_fiscal: anho_fiscal.value }
         fetch("{{ route('ultimoCodigo') }}", 
             { method: "POST", headers: new Headers( {"Content-Type": "application/json"} ),
             body: JSON.stringify( requestBody )
@@ -155,6 +155,8 @@ anho_fiscal.addEventListener("change", function() {
             if(data.status == "success"){
                 document.getElementById('codigo').value = data.codigo;
             }
+        }).catch(error => {
+            if(!alert("Advertencia: Ocurrio un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina")) location.reload();
         });
     } catch (error) {
         alert("Advertencia: Ocurrio un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina");

@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProveedoresController;
 use App\Http\Controllers\LocalidadesController;
+use App\Http\Controllers\DepartamentosController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PresupuestosController;
 use App\Http\Controllers\Proyectos\ProyectosController;
@@ -45,6 +46,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::resource('proveedores', ProveedoresController::class);
     Route::resource('localidades', LocalidadesController::class);
+    Route::resource('departamentos', DepartamentosController::class);
     Route::resource('users', UsersController::class);
     
     Route::resource('presupuestos', PresupuestosController::class);

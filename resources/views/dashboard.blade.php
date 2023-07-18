@@ -16,24 +16,6 @@
     <section class="content">
         <div class="form-group">
             <center><h3>Barras de Presupuesto vs Gasto</h3></center>
-            <label class="col-sm-2 col-xs-4 control-label">Proveedores</label>
-            <div class="col-sm-6 col-xs-4">
-                <select id="proveedor" name="proveedor" class="form-control">
-                    <option value="">--- TODOS ---</option>
-                    @foreach ($proveedores as $proveedor)
-                        <option value="{{ $proveedor->id }}" @if($proveedor->id==old('proveedor')) selected @endif>{{ $proveedor->nombre_fantasia }}</option>
-                    @endforeach
-                </select>
-                @error('proveedor') <div class="text-red">{{ $message }}</div> @enderror
-            </div>
-        </div>
-        <div class="clearfix"></div><br />
-        <div id="grafico1" style="width: 800px; height: 500px;"></div>
-    </section>
-
-    <section class="content">
-        <div class="form-group">
-            <center><h3>Barras de Licitaciones por Proveedor</h3></center>
             <label class="col-sm-2 col-xs-4 control-label">Anho Fiscal</label>
             <div class="col-sm-6 col-xs-4">
                 <select id="anho_fiscal" name="anho_fiscal" class="form-control">
@@ -47,6 +29,24 @@
         </div>
         <div class="clearfix"></div><br />
         <div id="grafico2" style="width: 800px; height: 500px;"></div>
+    </section>
+
+    <section class="content">
+        <div class="form-group">
+            <center><h3>Barras de Licitaciones por Proveedor</h3></center>
+            <label class="col-sm-2 col-xs-4 control-label">Proveedores</label>
+            <div class="col-sm-6 col-xs-4">
+                <select id="proveedor" name="proveedor" class="form-control">
+                    <option value="">--- TODOS ---</option>
+                    @foreach ($proveedores as $proveedor)
+                        <option value="{{ $proveedor->id }}" @if($proveedor->id==old('proveedor')) selected @endif>{{ $proveedor->nombre_fantasia }}</option>
+                    @endforeach
+                </select>
+                @error('proveedor') <div class="text-red">{{ $message }}</div> @enderror
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+        <div id="grafico1" style="width: 800px; height: 500px;"></div>
     </section>
 
     <section class="content">
