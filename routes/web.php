@@ -56,6 +56,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('presupuestos.proyectos', ProyectosController::class);
     Route::get('presupuestos/{presupuesto}/proyectos/{id}/editEstado', [ProyectosController::class, 'editEstado'])->name('presupuestos.proyectos.editEstado');
     Route::put('presupuestos/{presupuesto}/proyectos/{id}/editEstado', [ProyectosController::class, 'updateEstado'])->name('presupuestos.proyectos.update-estado');
+    Route::post('presupuestos/{presupuesto}/proyectos/{id}/reclass', [ProyectosController::class, 'reclass'])->name('presupuestos.proyectos.reclass');
     
     Route::resource('proyectos.subproyectos', SubproyectosController::class);
     Route::get('proyectos/{proyecto}/subproyectos/{id}/editEstado', [SubproyectosController::class, 'editEstado'])->name('proyectos.subproyectos.editEstado');

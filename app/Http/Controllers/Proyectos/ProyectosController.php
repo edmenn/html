@@ -94,6 +94,41 @@ class ProyectosController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function reclass(Request $request, Presupuesto $presupuesto, $proyecto_id)
+    {
+        // verificamos si ya se hizo reclass del proyecto
+        $reclass = Proyecto::where('reclass_id', $proyecto_id)->get();
+        if($reclass->count() > 0){
+            return response()->json(['status' => 'error', 'message' => 'Ya se ha realizado un reclass del proyecto seleccionado.']);
+        }
+
+        $proyecto = Proyecto::findOrFail($proyecto_id);
+        $ahorros_proyecto = intval($proyecto->costo) - intval($proyecto->contratado);
+
+        // creamos un nuevo proyecto
+        $new_proyecto = new Proyecto;
+        $new_proyecto->presupuesto_id = $proyecto->presupuesto_id;
+        $new_proyecto->nombre = "Reclass del Proyecto: " . $proyecto->nombre;
+        $new_proyecto->descripcion = "Reclass del Proyecto: " . $proyecto->descripcion;
+        $new_proyecto->anho_fiscal = $proyecto->anho_fiscal;
+        $new_proyecto->codigo = $proyecto->codigo . "_1";
+        $new_proyecto->user_id = $proyecto->user_id;
+        $new_proyecto->costo = $ahorros_proyecto;
+        $new_proyecto->contratado = 0;
+        $new_proyecto->estado_id = 1; // en proceso
+        $new_proyecto->reclass_id = $proyecto_id;
+        $new_proyecto->save();
+
+        // retornamos respuesta
+        return response()->json(['status' => 'success', 'message' => 'Reclass creado exitosamente.']);
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  int  $id

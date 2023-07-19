@@ -88,6 +88,13 @@
                                             <a href="{{ route('proyectos.licitaciones.index', $item->id) }}" class="btn btn-success">Licitaciones</a>
                                         </td>
                                     </tr>
+                                    @if ($item->estado_id === 3)
+                                    <tr>
+                                        <td colspan="3" class="text-center">
+                                            <button onclick="reclass({{ $item->id }})" class="btn btn-default">RECLASS</button>
+                                        </td>
+                                    </tr>
+                                    @endif
                                     </tbody>
                                 </table>
                             </td>
@@ -124,6 +131,27 @@ function eliminateHandle(id){
             alert("Advertencia: Ocurrio un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina");
             console.log(error);
         }
+    }
+}
+
+function reclass(id){
+    try {
+        let requestBody = { _token: '{{ csrf_token() }}' }
+        fetch("/presupuestos/{{ $presupuesto->id }}/proyectos/"+id+"/reclass", 
+            { method: "POST", headers: new Headers( {"Content-Type": "application/json"} ),
+            body: JSON.stringify( requestBody )
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.status == "success"){
+                if(!alert(data.message)) location.reload();
+            }else if(data.message){
+                alert(data.message);
+            }
+        });
+    } catch (error) {
+        alert("Advertencia: Ocurrio un error intentado resolver la solicitud, por favor complete todos los campos o recargue de vuelta la pagina");
+        console.log(error);
     }
 }
 document.addEventListener('DOMContentLoaded', function () {
